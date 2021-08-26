@@ -86,4 +86,38 @@ public class MainController {
 
 - localhost:8080로 쐈을때 check()함수에서 "server workds"가 리턴되는것까지 확인
 
-
+- git에 push하기 전에 ignore에 아래 내용을 추가해준다.
+~~~
+### Java template
+*.class
+ 
+# Package Files #
+*.jar
+*.war
+*.ear
+ 
+### macOS template
+*.DS_Store
+.AppleDouble
+.LSOverride
+ 
+# IntelliJ project files
+.idea
+.idea/*.xml
+*.iml
+out
+gen
+build
+rebel.xml
+ 
+# Compliled files
+/target/
+**/target
+ 
+/example/
+ 
+# Gradle
+.gradle
+/build/
+.gradletasknamecache
+~~~
