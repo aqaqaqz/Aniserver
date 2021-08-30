@@ -25,5 +25,12 @@ repositories {
 
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
+
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.23'
+    implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
