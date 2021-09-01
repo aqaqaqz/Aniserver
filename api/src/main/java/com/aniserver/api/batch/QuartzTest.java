@@ -6,10 +6,11 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.impl.triggers.CronTriggerImpl;
 
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
@@ -29,21 +30,32 @@ public class QuartzTest implements Serializable {
         return scheduler;
     }
 
-    //job 추가
-    public static boolean addJob(String time, String classPath, String jobId){
-        return addJob(time, classPath, jobId, defaultGroupName);
+    public static boolean addJob(String time, String target, String type, String jobId) {
+        return addJob(time, target, type, jobId, defaultGroupName, null);
     }
-    public static boolean addJob(String time, String classPath, String jobId, String jobGroupName) {
-        try{
-            Class targetClass  = Class.forName(classPath);
+    public static boolean addJob(String time, String target, String type, String jobId, String jobGroupName) {
+        return addJob(time, target, type, jobId, jobGroupName, null);
+    }
+    public static boolean addJob(String time, String target, String type, String jobId, Map<String, Object> params) {
+        return addJob(time, target, type, jobId, defaultGroupName, params);
+    }
+    public static boolean addJob(String time, String target, String type, String jobId, String jobGroupName, Map<String, Object> params) {
+        if("class".equals(type)) return addJobClass(time, target, jobId, jobGroupName, params);
+        if("procedure".equals(type)) return addJobProcedure(time, target, jobId, jobGroupName, params);
 
-            //java9부터 clazz.newInstance() deprecated
+        return false;
+    }
+
+    private static boolean addJobClass(String time, String clazz, String jobId, String jobGroupName, Map<String, Object> params) {
+        try{
+            Class targetClass  = Class.forName(clazz);
+
             JobDetail job = newJob(targetClass)
                     .withIdentity(jobId, jobGroupName)
                     .build();
 
             CronTrigger trigger = newTrigger()
-                    .withIdentity("trigger1", "group1")
+                    .withIdentity(jobId+"Trigger", jobGroupName)
                     .withSchedule(cronSchedule(time))
                     .build();
 
@@ -51,14 +63,12 @@ public class QuartzTest implements Serializable {
             scheduler.scheduleJob(job, trigger);
         }catch(SchedulerException | ClassNotFoundException e) {
             System.out.println("message : " + e.getMessage());
-            System.out.println("getStackTrace : " + e.getStackTrace());
-            System.out.println("getLocalizedMessage : " + e.getLocalizedMessage());
-            System.out.println("getCause : " + e.getCause());
-            System.out.println("getSuppressed : " + e.getSuppressed());
-
             return false;
         }
 
+        return true;
+    }
+    private static boolean addJobProcedure(String time, String target, String jobId, String jobGroupName, Map<String, Object> params) {
         return true;
     }
 

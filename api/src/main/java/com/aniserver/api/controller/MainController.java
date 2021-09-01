@@ -1,4 +1,4 @@
-package com.aniserver.api;
+package com.aniserver.api.controller;
 
 import com.aniserver.api.batch.QuartzTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class MainController {
 
     @PostMapping(value = "/quartz")
     public String addQuartz() {
-        QuartzTest.addJob("0/10 * * * * ?", "com.aniserver.api.batch.Job.QuartzJobTest",  "schdule_"+seq);
+        QuartzTest.addJob("0/10 * * * * ?", "com.aniserver.api.batch.Job.QuartzJobTest",  "schdule_"+seq, "class");
         return "[schdule_" + seq++ + "]가 추가되었습니다.";
     }
 
