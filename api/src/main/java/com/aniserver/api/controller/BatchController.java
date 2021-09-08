@@ -2,6 +2,7 @@ package com.aniserver.api.controller;
 
 import com.aniserver.api.batch.Batch;
 import com.aniserver.api.model.QuartzInfo;
+import org.quartz.SchedulerException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,20 +10,23 @@ import java.util.List;
 @RestController
 @RequestMapping("api")
 public class BatchController {
-/*
-    BatchController(){
+
+    public static void initDefaultBatch(){
         QuartzInfo info = new QuartzInfo();
         info.setGroupName("aniserver");
         info.setJobName("ohys");
+        info.setType("class");
         info.setTarget("com.aniserver.api.batch.Job.OhysDownload");
-        info.setTime("10/* * * * * ?");
+        info.setDescription("add ohys download");
+        info.setTime("0/10 * * * * ?");
+        info.setParams("{\"msg\":\"test msg\"}");
         Batch.addJob(info);
     }
-*/
+
 
     @GetMapping(value = "/quartz/job")
-    public List<QuartzInfo> getQuartzList(@RequestBody QuartzInfo info) {
-        return Batch.getJobIdList(info);
+    public List<String> getQuartzList(@RequestParam String groupName) {
+        return Batch.getJobIdList(groupName);
     }
 
     @PostMapping(value = "/quartz/job")

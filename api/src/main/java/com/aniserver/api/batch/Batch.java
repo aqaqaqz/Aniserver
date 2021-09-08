@@ -1,6 +1,8 @@
 package com.aniserver.api.batch;
 
 import com.aniserver.api.model.QuartzInfo;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.quartz.*;
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
@@ -8,10 +10,7 @@ import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.util.ObjectUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.Serializable;
 import java.text.ParseException;
 
@@ -25,22 +24,32 @@ public class Batch implements Serializable {
 
     private static Scheduler scheduler;
 
-    private static JobDataMap convertJobDataMap(Map<String, Object> params){
+    private static JobDataMap convertJobDataMap(String params){
         JobDataMap m = new JobDataMap();
-        for(String key : params.keySet()){
-            m.put(key, params.get(key));
+        if(ObjectUtils.isEmpty(params)) return m;
+
+        JSONParser parser = new JSONParser();
+        JSONObject json;
+        try {
+            json = (JSONObject) parser.parse(params);
+
+            for(String key : (Set<String>)json.keySet()){
+                m.put(key, json.get(key));
+            }
+        } catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
         }
 
         return m;
     }
 
-    private static Map<String, Object> convertJobDataMap(JobDataMap jobData){
-        Map<String, Object> m = new HashMap<>();
+    private static String convertJobDataMap(JobDataMap jobData){
+        JSONObject json = new JSONObject();
         for(String key : jobData.keySet()){
-            m.put(key, jobData.get(key));
+            json.put(key, jobData.get(key));
         }
 
-        return m;
+        return json.toJSONString();
     }
 
 
@@ -124,27 +133,14 @@ public class Batch implements Serializable {
     }
 
     //등록된 job들의 id리스트
-    public static List<QuartzInfo> getJobIdList(QuartzInfo info) {
-        List<QuartzInfo> jobList = new ArrayList();
+    public static List<String> getJobIdList(String groupName) {
+        List<String> jobList = new ArrayList();
 
-        String groupName = info.getGroupName();
         if(groupName == null) groupName = defaultGroupName;
         try{
             Scheduler scheduler = getScheduler();
             for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))){
-                JobDetail detail = scheduler.getJobDetail(jobKey);
-
-                QuartzInfo newInfo = new QuartzInfo();
-                newInfo.setJobName(jobKey.getName());
-                newInfo.setGroupName(jobKey.getGroup());
-                newInfo.setDescription(detail.getDescription());
-                newInfo.setParams(convertJobDataMap(detail.getJobDataMap()));
-
-                newInfo.setTarget(detail.getJobClass().toString());
-                //프로시저는 어쩔꺼임?
-                //등록자, 수정자는?
-
-                jobList.add(newInfo);
+                jobList.add(jobKey.getName());
             }
         }catch(SchedulerException e){
             System.out.println("getJobIdList : " + e.getMessage());

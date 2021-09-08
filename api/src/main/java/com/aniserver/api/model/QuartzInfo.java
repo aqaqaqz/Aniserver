@@ -10,7 +10,7 @@ public class QuartzInfo {
     private String time;
     private String target;
     private String state;
-    private Map<String, Object> params;
+    private String params;
 
     public String getJobName() {
         return jobName;
@@ -24,7 +24,7 @@ public class QuartzInfo {
         return groupName;
     }
 
-    public void setGroupName(String jobGroupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 
@@ -68,11 +68,11 @@ public class QuartzInfo {
         this.state = state;
     }
 
-    public Map<String, Object> getParams() {
+    public String getParams() {
         return params;
     }
 
-    public void setParams(Map<String, Object> params) {
+    public void setParams(String params) {
         this.params = params;
     }
 }
