@@ -1,12 +1,12 @@
 # Aniserver
 
 - api server
-    - mysql
+    - sqlite
     - spring 
         - login
         - animation list
         - subtitle upload
-        - batch
+        - batch(quartz)
         - classify animation file
     - node.js
         - convert subtitle (smi, srt, ass -> vtt)

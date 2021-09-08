@@ -4,8 +4,8 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class QuartzJobTest implements Job {
-    private String msg = "QuartzJobTest이 실행되었습니다.";
+public class OhysDownload implements Job {
+    private String msg = "OhysDownload 실행되었습니다.";
 
     public void setMsg(String _msg){
         msg = _msg;

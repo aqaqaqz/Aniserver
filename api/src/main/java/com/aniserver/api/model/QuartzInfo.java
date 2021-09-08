@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class QuartzInfo {
     private String jobName;
-    private String jobGroupName;
+    private String groupName;
     private String description;
     private String type;
     private String time;
@@ -20,12 +20,12 @@ public class QuartzInfo {
         this.jobName = jobName;
     }
 
-    public String getJobGroupName() {
-        return jobGroupName;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setJobGroupName(String jobGroupName) {
-        this.jobGroupName = jobGroupName;
+    public void setGroupName(String jobGroupName) {
+        this.groupName = groupName;
     }
 
     public String getDescription() {

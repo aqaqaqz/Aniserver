@@ -121,3 +121,22 @@ rebel.xml
 /build/
 .gradletasknamecache
 ~~~
+
+- db 설정(sqlite)
+    - 처음엔 mysql을 사용하려 했는데 다른곳에서 설정하려면 매우 귀찮아진다. 그래서 sqlite로 변경했다.
+    - 그래들에 아래 2개를 추가하고 빌드한다.
+        - implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
+        - implementation 'com.github.gwenn:sqlite-dialect:0.1.2'
+    - gui가 짱이다. sqlite를 보기 위해 sqlitebrowser를 다운받는다.
+        - https://sqlitebrowser.org/blog/version-3-12-2-released/
+    - 프로젝트 폴더 안에 sqlitesample.db라는 놈이 생기는데 날려버리고 sqlitebrowser를 열어 새로 생성해준다.
+    - 들어진 db를 application.properties에 넣어준다.
+        - spring.datasource.url=jdbc:sqlite:aniserver.db
+    - 정상적으로 동작되는지 확인을 위해 TEST란 테이블을 만들고 컬럼 생성후 쿼리를 날려본다.
+        - 컨트롤러에 해당 내용을 넣고 postman으로 쏴서 결과물이 나오면 설정은 끝.
+~~~
+    @GetMapping(value = "/dbTest")
+    public List<Map<String, Object>> dbTest() throws Exception {
+        return jdbcTemplate.queryForList("SELECT * FROM TEST");
+    }
+~~~

@@ -111,7 +111,7 @@ public class MainController {
 	- https://github.com/quartz-scheduler/quartz/tree/quartz-2.3.x/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstore
 	- 공식 문서에는 org.quartz.dataSource.myDS.provider = hikaricp 이 내용이 빠져잇는데 없으면 db에 못붙는다. 스프링 부트인경우 넣어줘야 하는듯한데 자세한 내용은 찾아봐야 함.
 
-- 실행시킬 각 클래스들은 Job interfact를 implements 시켜주고 execute함수를 override해준다.
+- 실행시킬 각 클래스들은 Job interface를 implements 시켜주고 execute함수를 override해준다.
 ~~~
 public class Test implements Job {
     public Test() {

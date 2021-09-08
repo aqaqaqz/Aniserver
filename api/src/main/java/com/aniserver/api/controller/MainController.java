@@ -20,7 +20,7 @@ public class MainController {
 
     @GetMapping(value = "/dbTest")
     public List<Map<String, Object>> dbTest() throws Exception {
-        return jdbcTemplate.queryForList("SELECT * FROM DASHBOARD");
+        return jdbcTemplate.queryForList("SELECT * FROM TEST");
     }
 
 }
