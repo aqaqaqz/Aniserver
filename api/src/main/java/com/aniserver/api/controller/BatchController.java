@@ -19,7 +19,13 @@ public class BatchController {
         info.setTarget("com.aniserver.api.batch.Job.OhysDownload");
         info.setDescription("add ohys download");
         info.setTime("0/10 * * * * ?");
-        info.setParams("{\"msg\":\"test msg\"}");
+        info.setParams(""
+            .concat("{")
+                .concat("\"url\":\"https://ohys.nl/tt/json.php?dir=disk&p=0\",")
+                .concat("\"downUrl\":\"https://ohys.nl/tt/\",")
+                .concat("\"downPath\":\"C:/test/\"")
+            .concat("}")
+        );
         Batch.addJob(info);
     }
 
