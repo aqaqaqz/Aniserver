@@ -2,14 +2,12 @@ package com.aniserver.api.model;
 
 import java.util.Map;
 
-public class QuartzInfo {
+public class Batch {
     private String jobName;
     private String groupName;
-    private String description;
-    private String type;
-    private String time;
     private String target;
-    private String state;
+    private String description;
+    private String time;
     private String params;
 
     public String getJobName() {
@@ -28,30 +26,6 @@ public class QuartzInfo {
         this.groupName = groupName;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String getTarget() {
         return target;
     }
@@ -60,12 +34,20 @@ public class QuartzInfo {
         this.target = target;
     }
 
-    public String getState() {
-        return state;
+    public String getDescription() {
+        return description;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getParams() {

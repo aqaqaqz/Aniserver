@@ -1,6 +1,6 @@
 package com.aniserver.api.batch;
 
-import com.aniserver.api.model.QuartzInfo;
+import com.aniserver.api.model.Batch;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.quartz.*;
@@ -18,7 +18,7 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
-public class Batch implements Serializable {
+public class Quartz implements Serializable {
     private static final long serialVersionUID = 1L;
     private static String defaultGroupName = "adminScheduler";
 
@@ -61,15 +61,7 @@ public class Batch implements Serializable {
         return scheduler;
     }
 
-    public static boolean addJob(QuartzInfo info){
-        String type = info.getType();
-        if("class".equals(type)) return addJobClass(info);
-        if("procedure".equals(type)) return addJobProcedure(info);
-
-        return false;
-    }
-
-    private static boolean addJobClass(QuartzInfo info) {
+    public static boolean addJob(Batch info) {
         try{
             Class targetClass  = Class.forName(info.getTarget());
 
@@ -93,12 +85,9 @@ public class Batch implements Serializable {
 
         return true;
     }
-    private static boolean addJobProcedure(QuartzInfo info) {
-        return true;
-    }
 
     //job 삭제
-    public static boolean removeJob(QuartzInfo info) {
+    public static boolean removeJob(Batch info) {
         try{
             String jobName = info.getJobName();
             String groupName = info.getGroupName();
@@ -112,9 +101,9 @@ public class Batch implements Serializable {
         }
         return true;
     }
-
+/*
     //job 일시정지
-    public static boolean updateJobState(QuartzInfo info) {
+    public static boolean updateJobState(com.aniserver.api.model.Batch info) {
         try{
             String jobName = info.getJobName();
             String groupName = info.getGroupName();
@@ -131,6 +120,7 @@ public class Batch implements Serializable {
         }
         return true;
     }
+ */
 
     //등록된 job들의 id리스트
     public static List<String> getJobIdList(String groupName) {
@@ -149,7 +139,7 @@ public class Batch implements Serializable {
     }
 
     //등록된 job의 업데이트
-    public static boolean updateJobDetail(QuartzInfo info){
+    public static boolean updateJobDetail(Batch info){
         try {
             String triggerName = info.getJobName() + "Trigger";
             String groupName = info.getGroupName();

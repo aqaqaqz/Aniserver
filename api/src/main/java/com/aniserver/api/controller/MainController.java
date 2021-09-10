@@ -10,10 +10,6 @@ import java.util.Map;
 @RestController
 public class MainController {
 
-    static public void init(){
-        BatchController.initDefaultBatch();
-    }
-
     @Autowired
     JdbcTemplate jdbcTemplate;
 

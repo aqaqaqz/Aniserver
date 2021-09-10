@@ -1,8 +1,9 @@
 package com.aniserver.api.controller;
 
-import com.aniserver.api.batch.Batch;
-import com.aniserver.api.model.QuartzInfo;
-import org.quartz.SchedulerException;
+import com.aniserver.api.batch.Quartz;
+import com.aniserver.api.model.Batch;
+import com.aniserver.api.service.BatchService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,48 +12,35 @@ import java.util.List;
 @RequestMapping("api")
 public class BatchController {
 
-    public static void initDefaultBatch(){
-        QuartzInfo info = new QuartzInfo();
-        info.setGroupName("aniserver");
-        info.setJobName("ohys");
-        info.setType("class");
-        info.setTarget("com.aniserver.api.batch.Job.OhysDownload");
-        info.setDescription("add ohys download");
-        info.setTime("0/10 * * * * ?");
-        info.setParams(""
-            .concat("{")
-                .concat("\"url\":\"https://ohys.nl/tt/json.php?dir=disk&p=0\",")
-                .concat("\"downUrl\":\"https://ohys.nl/tt/\",")
-                .concat("\"downPath\":\"C:/test/\"")
-            .concat("}")
-        );
-        Batch.addJob(info);
+    @Autowired
+    BatchService batchService;
+
+    @GetMapping(value = "/batch/init")
+    public void initBatchList() throws Exception {
+        List<Batch> batchList = batchService.getAllBatchList();
+        for(Batch batch : batchList){
+            Quartz.addJob(batch);
+        }
     }
 
-
-    @GetMapping(value = "/quartz/job")
+    @GetMapping(value = "/batch/job")
     public List<String> getQuartzList(@RequestParam String groupName) {
-        return Batch.getJobIdList(groupName);
+        return Quartz.getJobIdList(groupName);
     }
 
-    @PostMapping(value = "/quartz/job")
-    public String addQuartz(@RequestBody QuartzInfo info) {
-        return (Batch.addJob(info)?info.getJobName()+" add":"fail");
+    @PostMapping(value = "/batch/job")
+    public String addQuartz(@RequestBody Batch info) {
+        return (Quartz.addJob(info)?info.getJobName()+" add":"fail");
     }
 
-    @DeleteMapping(value = "/quartz/job")
-    public void removeQuartz(@RequestBody QuartzInfo info) {
-        Batch.removeJob(info);
+    @DeleteMapping(value = "/batch/job")
+    public void removeQuartz(@RequestBody Batch info) {
+        Quartz.removeJob(info);
     }
 
-    @PutMapping(value = "/quartz/job/detail")
-    public void updateQuartz(@RequestBody QuartzInfo info) {
-        Batch.updateJobDetail(info);
-    }
-
-    @PutMapping(value = "/quartz/job/state")
-    public void updateJobState(@RequestBody QuartzInfo info) {
-        Batch.updateJobState(info);
+    @PutMapping(value = "/batch/job")
+    public void updateQuartz(@RequestBody Batch info) {
+        Quartz.updateJobDetail(info);
     }
 
 }
