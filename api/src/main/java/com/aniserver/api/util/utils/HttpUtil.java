@@ -1,4 +1,4 @@
-package com.aniserver.api.common;
+package com.aniserver.api.util.utils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -6,14 +6,13 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-public class Util {
-    public static HttpURLConnection getConnection(String url, String type, Map<String, String> header) throws IOException {
+public class HttpUtil {
+    public HttpURLConnection getConnection(String url, String type, Map<String, String> header) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod(type);
         for(String key : header.keySet()){
@@ -24,7 +23,7 @@ public class Util {
         return connection;
     }
 
-    public static String api(String url, String type, Map<String, String> header) throws IOException {
+    public String api(String url, String type, Map<String, String> header) throws IOException {
         String data = "";
 
         HttpURLConnection connection = getConnection(url, type, header);
@@ -43,13 +42,13 @@ public class Util {
         }
 
         data = sb.toString();
-        data = data.replace("\uFEFF", ""); //remove UTF-16 BOM
         data = data.replace("\uEFBBBF", ""); // remove UTF-8 BOM
+        data = data.replace("\uFEFF", ""); //remove UTF-16 BOM
 
         return data;
     }
 
-    public static JSONObject convertStringToJson(String str){
+    public JSONObject convertStringToJson(String str){
         JSONParser parser = new JSONParser();
         JSONObject json = new JSONObject();
         try {
@@ -61,7 +60,7 @@ public class Util {
         return json;
     }
 
-    public static JSONArray convertStringToJsonArray(String str){
+    public JSONArray convertStringToJsonArray(String str){
         System.out.println(str);
 
         JSONParser parser = new JSONParser();

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="batch">
+
+    <select id="getDirectory" resultType="com.aniserver.api.model.Batch">
+        SELECT td.*
+          FROM directory td, directory dd
+         WHERE 1=1
+        <if test="directoryId != null and directoryId != ''">
+           AND d.directoryId = #{directoryId}
+        </if>
+
+    </select>
+
+</mapper>
