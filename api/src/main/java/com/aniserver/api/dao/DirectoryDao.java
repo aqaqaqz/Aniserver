@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 public class DirectoryDao extends BaseDao {
 
-    private int removeDirectory(String directoryId) throws IOException, EmptyParamException {
+    private int removeAllDirectory(String directoryId) throws IOException, EmptyParamException {
         if(StringUtils.isEmpty(directoryId)) throw new EmptyParamException("getDirectory", "directoryId");
-        return getSession().insert("directory.removeDirectory", directoryId);
+        return getSession().insert("directory.removeAllDirectory", directoryId);
     }
 
     public List<Batch> getDirectory(String directoryId) throws IOException, EmptyParamException {
