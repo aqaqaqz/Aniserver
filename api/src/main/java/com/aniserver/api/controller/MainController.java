@@ -34,8 +34,12 @@ public class MainController {
         header.put("X-Naver-Client-Id", "qxx5tYNz5QnKfeNHRP1H");
         header.put("X-Naver-Client-Secret", "q3MFVwumGt");
 
-        String url = "https://openapi.naver.com/v1/search/blog?query="+ URLEncoder.encode(keyword, "UTF-8");
-        String rst = Util.http.api(url, "GET", header);
+        Map<String, String> param = new HashMap<>();
+        param.put("query", URLEncoder.encode(keyword, "UTF-8"));
+
+        String url = "https://openapi.naver.com/v1/search/blog";
+
+        String rst = Util.http.api(url, "GET", header, param);
         JSONObject json = Util.http.convertStringToJson(rst);
 
         return rst;

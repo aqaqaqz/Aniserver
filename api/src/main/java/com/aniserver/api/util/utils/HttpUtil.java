@@ -3,8 +3,6 @@ package com.aniserver.api.util.utils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,19 +28,20 @@ public class HttpUtil {
             connection.setRequestProperty(key, header.get(key));
         }
 
-        connection.setDoOutput(true);
-
-        if(!isGet && !StringUtils.isEmpty(param)) {
-            PrintWriter printWriter = new PrintWriter(connection.getOutputStream());
-            printWriter.print(param);
-            printWriter.close();
+        if(!isGet) {
+            connection.setDoOutput(true);
+            if(param!=null && !"".equals(param)) {
+                PrintWriter printWriter = new PrintWriter(connection.getOutputStream());
+                printWriter.print(param);
+                printWriter.close();
+            }
         }
 
         return connection;
     }
 
     public String getParamSting(Map<String, String> param){
-        if(ObjectUtils.isEmpty(param)) return "";
+        if(param==null || param.isEmpty()) return "";
 
         StringBuffer sb = new StringBuffer();
 
