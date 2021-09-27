@@ -5,6 +5,7 @@ import com.aniserver.api.exception.EmptyParamException;
 import com.aniserver.api.model.Batch;
 import com.aniserver.api.model.Directory;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -31,6 +32,20 @@ public class DirectoryDao extends BaseDao {
     public int updateDirectory(Directory directory) throws IOException, EmptyParamException {
         if(StringUtils.isEmpty(directory.getDirectoryId())) throw new EmptyParamException("updateDirectory", "directoryId");
         return getSession().insert("directory.updateDirectory", directory);
+    }
+
+    public int insertDirectoryList(List<Directory> list) throws IOException {
+        if(ObjectUtils.isEmpty(list)) return 0;
+        for(Directory d : list){
+            insertDirectory(d);
+            insertDirectoryList(d.getSublist());
+        }
+        return 1;
+    }
+
+    public int insertDirectory(Directory directory) throws IOException {
+        if(ObjectUtils.isEmpty(directory)) return 0;
+        return getSession().insert("directory.insertDirectory", directory);
     }
 
 }

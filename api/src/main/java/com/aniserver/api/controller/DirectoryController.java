@@ -6,14 +6,16 @@ import com.aniserver.api.service.DirectoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("api")
 public class DirectoryController {
     @Autowired
     DirectoryService directoryService;
 
-    @GetMapping(value = "/directory/list")
-    public String addQuartz(@RequestBody Batch info) {
-        return (Quartz.addJob(info)?info.getJobName()+" add":"fail");
+    @GetMapping(value = "/directory/scan")
+    public void scan() throws IOException {
+        directoryService.scanPath();
     }
 }

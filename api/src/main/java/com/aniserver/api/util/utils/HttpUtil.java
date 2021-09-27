@@ -10,15 +10,47 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Set;
 
 public class HttpUtil {
-    public HttpURLConnection getConnection(String url, String type, Map<String, String> header) throws IOException {
-        return getConnection(url, type, header, null);
-    }
-    public HttpURLConnection getConnection(String url, String type, Map<String, String> header, Map<String, String> p) throws IOException {
+    public HttpURLConnection getConnection(String url, String type, Map<String, String> header, JSONObject p) throws IOException {
         boolean isGet = "GET".equals(type);
-        String param = getParamSting(p);
+
+        if(isGet && !p.isEmpty()){
+            String param = "";
+            for(String key : (Set<String>)p.keySet()){
+                if("".equals(param)) param = "?";
+                else param += "&";
+
+                param += (key+"="+p.get(key));
+            }
+            url += "?"+param;
+        }
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestMethod(type);
+        for(String key : header.keySet()){
+            connection.setRequestProperty(key, header.get(key));
+        }
+
+        if(!isGet) {
+            connection.setDoOutput(true);
+            String param = p.toString();
+            if(param!=null && !"".equals(param)) {
+                PrintWriter printWriter = new PrintWriter(connection.getOutputStream());
+                printWriter.print(param);
+                printWriter.close();
+            }
+        }
+
+        return connection;
+    }
+
+    public HttpURLConnection getConnection(String url, String type, Map<String, String> header, JSONArray p) throws IOException {
+        boolean isGet = "GET".equals(type);
+        String param = p.toString(); //get확인해봐야함.
 
         if(isGet) url += "?"+param;
 
@@ -32,7 +64,7 @@ public class HttpUtil {
             connection.setDoOutput(true);
             if(param!=null && !"".equals(param)) {
                 PrintWriter printWriter = new PrintWriter(connection.getOutputStream());
-                printWriter.print(param);
+                printWriter.print(param.getBytes(StandardCharsets.UTF_8));
                 printWriter.close();
             }
         }
@@ -53,10 +85,7 @@ public class HttpUtil {
         return sb.toString();
     }
 
-    public String api(String url, String type, Map<String, String> header) throws IOException {
-        return api(url, type, header, null);
-    }
-    public String api(String url, String type, Map<String, String> header, Map<String, String> p) throws IOException {
+    public String api(String url, String type, Map<String, String> header, JSONObject p) throws IOException {
         String data = "";
 
         HttpURLConnection connection = getConnection(url, type, header, p);
@@ -64,7 +93,32 @@ public class HttpUtil {
         StringBuffer sb = new StringBuffer();
         if(connection.getResponseCode() == HttpURLConnection.HTTP_OK){
             BufferedReader br = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), "UTF-8")
+                    new InputStreamReader(connection.getInputStream(), "UTF-8")
+            );
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            br.close();
+        }
+
+        data = sb.toString();
+        data = data.replace("\uEFBBBF", ""); // remove UTF-8 BOM
+        data = data.replace("\uFEFF", ""); //remove UTF-16 BOM
+
+        return data;
+    }
+
+    public String api(String url, String type, Map<String, String> header, JSONArray p) throws IOException {
+        String data = "";
+
+        HttpURLConnection connection = getConnection(url, type, header, p);
+
+        StringBuffer sb = new StringBuffer();
+        if(connection.getResponseCode() == HttpURLConnection.HTTP_OK){
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream(), "UTF-8")
             );
 
             String line;
@@ -94,8 +148,6 @@ public class HttpUtil {
     }
 
     public JSONArray convertStringToJsonArray(String str){
-        System.out.println(str);
-
         JSONParser parser = new JSONParser();
         JSONArray json = new JSONArray();
         try {

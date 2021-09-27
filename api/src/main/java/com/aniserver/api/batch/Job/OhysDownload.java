@@ -58,7 +58,8 @@ public class OhysDownload implements Job {
 
         String data = null;
         try {
-            data = Util.http.api(url, "GET", header);
+            JSONObject param = new JSONObject();
+            data = Util.http.api(url, "GET", header, param);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,7 +77,8 @@ public class OhysDownload implements Job {
 
             HttpURLConnection connection = null;
             try {
-                connection = Util.http.getConnection(url, "GET", header);
+                JSONObject param = new JSONObject();
+                connection = Util.http.getConnection(url, "GET", header, param);
 
                 InputStream in = connection.getInputStream();
                 Path p = Paths.get(path);
