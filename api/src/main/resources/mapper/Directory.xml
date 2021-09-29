@@ -7,9 +7,7 @@
         SELECT td.*
           FROM directory td, directory dd
          WHERE 1=1
-        <if test="directoryId != null and directoryId != ''">
-           AND d.directoryId = '#{directoryId}'
-        </if>
+           AND d.directoryId in <foreach item="id" collection="list" open="(" separator="," close=")"> #{id} </foreach>
     </select>
 
     <insert id="insertDirectory">

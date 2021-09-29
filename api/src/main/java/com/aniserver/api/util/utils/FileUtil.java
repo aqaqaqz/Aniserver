@@ -12,6 +12,9 @@ import java.util.List;
 
 public class FileUtil {
     public List<Directory> scanDirectory(String path){
+        return scanDirectory(path, true);
+    }
+    public List<Directory> scanDirectory(String path, boolean subList){
         List<Directory> list = new ArrayList<>();
 
         File dir = new File(path);
@@ -22,12 +25,13 @@ public class FileUtil {
             String directoryYn = f.isFile()? Const.FALSE:Const.TRUE;
 
             Directory newDirectory = Directory.builder()
-                    .name(fullPath)
+                    .name(f.getName())
+                    .path(path)
                     .build();
 
             if(Const.TRUE.equals(directoryYn)){
                 newDirectory.setType(Util.code.FILE_DIRECTORY);
-                newDirectory.setSublist(scanDirectory(fullPath));
+                if(subList) newDirectory.setSublist(scanDirectory(fullPath));
             }else{
                 newDirectory.setType(Util.code.FILE_VIDEO);
             }
@@ -43,5 +47,25 @@ public class FileUtil {
 
     public void moveDirectory(String targetPath, String movePath){
 
+    }
+
+    public String getFilePath(String name, String rootPath){
+        return "";
+    }
+
+    public void divideFile(String path, String extension, String rootPath){
+        List<Directory> list = scanDirectory(path, false);
+        for(Directory d : list){
+            String e = "";
+            String name = d.getName();
+            for(int i=name.length()-1;i>=0;i--){
+                if(name.charAt(i) == '.') break;
+                e = name.charAt(i)+e;
+            }
+
+            if (extension.equals(e)) {
+                moveDirectory(d.getFullPath(), getFilePath(d.getName(), rootPath));
+            }
+        }
     }
 }

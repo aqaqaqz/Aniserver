@@ -9,6 +9,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -19,7 +20,12 @@ public class DirectoryDao extends BaseDao {
         return getSession().insert("directory.removeAllDirectory", directoryId);
     }
 
-    public List<Batch> getDirectory(String directoryId) throws IOException, EmptyParamException {
+    public List<Directory> getDirectory(String directoryId) throws IOException, EmptyParamException {
+        List<String> dirList = new ArrayList<>();
+        dirList.add(directoryId);
+        return getDirectory(dirList);
+    }
+    public List<Directory> getDirectory(List<String> directoryId) throws IOException, EmptyParamException {
         if(StringUtils.isEmpty(directoryId)) throw new EmptyParamException("getDirectory", "directoryId");
 
         return getSession().selectList("directory.getDirectory");
