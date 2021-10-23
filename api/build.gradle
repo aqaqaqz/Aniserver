@@ -4,7 +4,6 @@ buildscript{
     }
     repositories {
         mavenCentral()
-        jcenter()
     }
     dependencies{
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -35,13 +34,12 @@ dependencies {
 
     implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
     implementation 'com.github.gwenn:sqlite-dialect:0.1.2'
-    implementation 'junit:junit:4.13.1'
-    implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    implementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+
+    testImplementation 'org.assertj:assertj-core:3.19.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+    //testImplementation 'org.mockito:mockito-inline:3.6.0'
 
     implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.8.0'
-
 }
