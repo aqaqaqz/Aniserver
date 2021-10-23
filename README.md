@@ -4,10 +4,12 @@
     - sqlite
     - spring 
         - login
-        - animation list
         - subtitle upload
         - batch(quartz)
         - classify animation file
+            - management animation and subtitle files
+            - make new folder
+            - move file
     - node.js
         - convert subtitle (smi, srt, ass -> vtt)
         - web crawling
