@@ -1,18 +1,15 @@
 package com.aniserver.api.util;
 
-import com.aniserver.api.model.db.Directory;
-import com.aniserver.api.util.Util;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileTest {
 
     final String name = "TestFolder";
-    final String def = "c:/test/";
+    final String def = "./";
     final String fullPath = def + name;
 
     @BeforeEach

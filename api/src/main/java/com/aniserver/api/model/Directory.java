@@ -1,4 +1,4 @@
-package com.aniserver.api.model.db;
+package com.aniserver.api.model;
 
 import com.aniserver.api.util.Const;
 import lombok.Builder;

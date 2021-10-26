@@ -1,7 +1,7 @@
 package com.aniserver.api.controller;
 
 import com.aniserver.api.exception.EmptyParamException;
-import com.aniserver.api.model.db.Directory;
+import com.aniserver.api.model.Directory;
 import com.aniserver.api.service.DirectoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
