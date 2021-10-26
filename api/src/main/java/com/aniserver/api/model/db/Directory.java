@@ -23,8 +23,8 @@ public class Directory {
 
     private List<String> getOvaTitlePattern(){
         List<String> pattern = new ArrayList<>();
-        for(String extention : Const.movieExtension){
-            pattern.add(Const.OVA_TITLE_PATTERN+extention);
+        for(String extension : Const.movieExtension){
+            pattern.add(Const.OVA_TITLE_PATTERN+extension);
         }
 
         return pattern;
