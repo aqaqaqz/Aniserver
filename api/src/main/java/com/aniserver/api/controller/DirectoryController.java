@@ -12,21 +12,22 @@ import java.util.List;
 @RestController
 @RequestMapping("api")
 public class DirectoryController {
+
     @Autowired
     DirectoryService directoryService;
 
+    @GetMapping(value = "/directory")
+    public List<Directory> getList(@RequestParam(defaultValue="") String keyword) throws IOException {
+        return directoryService.getDirectoryList(keyword);
+    }
+
     @GetMapping(value = "/directory/scan")
-    public void scanPath() throws IOException {
-        //directoryService.scanPath();
+    public void scan() throws IOException {
+        directoryService.initDirectoryList();
     }
 
     @PutMapping(value = "/directory/move")
-    public void movePath(@RequestBody List<String> dirList) throws EmptyParamException, IOException {
+    public void move(@RequestBody List<String> dirList) throws EmptyParamException, IOException {
         //directoryService.movePath(dirList);
-    }
-
-    @PostMapping(value = "/directory/new")
-    public void newDirectory(@RequestBody List<Directory> dirList) throws EmptyParamException, IOException {
-        //directoryService.newDirectory(dirList);
     }
 }

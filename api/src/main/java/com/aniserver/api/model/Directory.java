@@ -13,13 +13,20 @@ import java.util.regex.Pattern;
 @Getter
 @Setter
 @Builder
-public class Directory {
-    private String directoryId;
-    private String upperId;
+public class Directory implements Cloneable {
     private String path;
     private String name;
     private String type;
     private List<Directory> sublist;
+
+    @Override
+    public Directory clone() {
+        try {
+            return (Directory) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 
     private List<String> getOvaTitlePattern(){
         List<String> pattern = new ArrayList<>();
@@ -59,7 +66,7 @@ public class Directory {
     }
 
     public String getTitle(){
-        if(type == "dir") return name;
+        if(isFolder()) return name;
 
         String title = name;
         for(String raw : Const.USE_RAWS){
@@ -76,5 +83,9 @@ public class Directory {
         title = title.trim();
 
         return title;
+    }
+
+    public boolean isFolder(){
+        return "dir".equals(type);
     }
 }
