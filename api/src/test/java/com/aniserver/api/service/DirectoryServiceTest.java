@@ -31,8 +31,8 @@ public class DirectoryServiceTest {
     }
 
     @Test
-    @DisplayName("에피소드 구하기")
-    public void getEpsodeTest(){
+    @DisplayName("타이틀 쿼터 구하기")
+    public void getQuarterByTitleTest(){
         assertThat(service.getQuarterByTitle(existName)).isEqualTo(quarter);
         assertThat(service.getQuarterByTitle(notExistName)).isEqualTo(Const.EMPTY);
     }
