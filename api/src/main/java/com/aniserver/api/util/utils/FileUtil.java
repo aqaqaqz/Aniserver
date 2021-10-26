@@ -64,27 +64,19 @@ public class FileUtil {
         f.delete();
     }
 
-    public void moveDirectory(String targetPath, String movePath){
-
-    }
-
-    public String getFilePath(String name, String rootPath){
-        return "";
-    }
-
-    public void divideFile(String path, String extension, String rootPath){
-        List<Directory> list = scanDirectory(path, false);
-        for(Directory d : list){
-            String e = "";
-            String name = d.getName();
-            for(int i=name.length()-1;i>=0;i--){
-                if(name.charAt(i) == '.') break;
-                e = name.charAt(i)+e;
-            }
-
-            if (extension.equals(e)) {
-                moveDirectory(d.getFullPath(), getFilePath(d.getName(), rootPath));
-            }
+    public void moveDirectory(String target, String move){
+        if(!isExist(target)) {
+            System.out.println("["+target+"] is not exist");
+            return;
         }
+
+        if(isExist(move)) {
+            System.out.println("["+target+"] is exist");
+            return;
+        }
+
+        File t = new File(target);
+        File m = new File(move);
+        t.renameTo(m);
     }
 }
