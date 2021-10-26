@@ -1,6 +1,7 @@
 package com.aniserver.api.model;
 
 import com.aniserver.api.util.Const;
+import com.aniserver.api.util.Util;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -86,6 +87,6 @@ public class Directory implements Cloneable {
     }
 
     public boolean isFolder(){
-        return "dir".equals(type);
+        return Util.code.FILE_DIRECTORY.equals(type);
     }
 }

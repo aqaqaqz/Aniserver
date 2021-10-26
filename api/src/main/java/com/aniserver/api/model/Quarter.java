@@ -1,6 +1,11 @@
 package com.aniserver.api.model;
 
+import com.aniserver.api.util.Const;
+import com.aniserver.api.util.Util;
+
 import java.time.LocalDate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Quarter {
     int year;

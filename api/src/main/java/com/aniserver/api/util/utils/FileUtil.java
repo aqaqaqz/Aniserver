@@ -5,8 +5,6 @@ import com.aniserver.api.util.Const;
 import com.aniserver.api.util.Util;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +25,7 @@ public class FileUtil {
             Directory newDirectory = Directory.builder()
                     .name(f.getName())
                     .path(path)
+                    .type((f.isFile()?Util.code.FILE_VIDEO:Util.code.FILE_DIRECTORY))
                     .build();
 
             if(Const.TRUE.equals(directoryYn)){

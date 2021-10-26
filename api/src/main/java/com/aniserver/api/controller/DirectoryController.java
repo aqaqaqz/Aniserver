@@ -6,7 +6,6 @@ import com.aniserver.api.service.DirectoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,17 +16,17 @@ public class DirectoryController {
     DirectoryService directoryService;
 
     @GetMapping(value = "/directory")
-    public List<Directory> getList(@RequestParam(defaultValue="") String keyword) throws IOException {
+    public List<Directory> getList(@RequestParam(defaultValue="") String keyword) {
         return directoryService.getDirectoryList(keyword);
     }
 
-    @GetMapping(value = "/directory/scan")
-    public void scan() throws IOException {
+    @PostMapping(value = "/directory/scan")
+    public void scan() {
         directoryService.initDirectoryList();
     }
 
     @PutMapping(value = "/directory/move")
-    public void move(@RequestBody List<String> dirList) throws EmptyParamException, IOException {
+    public void move(@RequestBody List<String> dirList) throws EmptyParamException {
         //directoryService.movePath(dirList);
     }
 }
