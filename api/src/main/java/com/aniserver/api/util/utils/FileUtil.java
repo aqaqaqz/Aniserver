@@ -50,11 +50,8 @@ public class FileUtil {
         String path = target + "/" + name;
         if(isExist(path)) return;
 
-        try {
-            Files.createDirectory(Path.of(path));
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        File f = new File(path);
+        f.mkdir();
     }
 
     public void removeDirectory(String path){
