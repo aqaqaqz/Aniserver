@@ -3,7 +3,7 @@
 
 <mapper namespace="directory">
 
-    <select id="getDirectory" resultType="com.aniserver.api.model.Directory">
+    <select id="getDirectory" resultType="com.aniserver.api.model.db.Directory">
         SELECT td.*
           FROM directory td, directory dd
          WHERE 1=1

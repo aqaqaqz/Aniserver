@@ -1,4 +1,4 @@
-package com.aniserver.api.model;
+package com.aniserver.api.model.db;
 
 import java.sql.Date;
 

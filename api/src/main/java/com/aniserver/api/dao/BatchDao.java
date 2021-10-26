@@ -1,7 +1,7 @@
 package com.aniserver.api.dao;
 
 import com.aniserver.api.dao.base.BaseDao;
-import com.aniserver.api.model.Batch;
+import com.aniserver.api.model.db.Batch;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;

@@ -1,6 +1,6 @@
 package com.aniserver.api.dao.base;
 
-import com.aniserver.api.model.Seq;
+import com.aniserver.api.model.db.Seq;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

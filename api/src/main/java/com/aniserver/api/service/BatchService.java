@@ -1,7 +1,7 @@
 package com.aniserver.api.service;
 
 import com.aniserver.api.dao.BatchDao;
-import com.aniserver.api.model.Batch;
+import com.aniserver.api.model.db.Batch;
 import com.aniserver.api.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,4 @@
-package com.aniserver.api.model;
-
-import java.util.Map;
+package com.aniserver.api.model.db;
 
 public class Batch {
     private String jobName;

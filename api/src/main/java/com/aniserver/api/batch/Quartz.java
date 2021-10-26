@@ -1,6 +1,6 @@
 package com.aniserver.api.batch;
 
-import com.aniserver.api.model.Batch;
+import com.aniserver.api.model.db.Batch;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.quartz.*;

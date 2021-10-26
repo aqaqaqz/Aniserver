@@ -2,8 +2,7 @@ package com.aniserver.api.dao;
 
 import com.aniserver.api.dao.base.BaseDao;
 import com.aniserver.api.exception.EmptyParamException;
-import com.aniserver.api.model.Batch;
-import com.aniserver.api.model.Directory;
+import com.aniserver.api.model.db.Directory;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;

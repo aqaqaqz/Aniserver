@@ -3,13 +3,13 @@
 
 <mapper namespace="base">
 
-    <select id="getSeq" resultType="com.aniserver.api.model.Seq">
+    <select id="getSeq" resultType="com.aniserver.api.model.db.Seq">
         select *
           from seq
          where seq.name = '${name}'
     </select>
 
-    <update id="updateSeq" parameterType="com.aniserver.api.model.Seq">
+    <update id="updateSeq" parameterType="com.aniserver.api.model.db.Seq">
         update seq
            set next = ${next}
          where seq.name = '${name}'
