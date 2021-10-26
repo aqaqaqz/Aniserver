@@ -47,7 +47,6 @@ public class Directory {
     }
 
     public int getEpsode(){
-        final String separator = " - ";
         int episodeNum = -1;
 
         Pattern pattern = Pattern.compile(Const.EPISODE_PATTERN);

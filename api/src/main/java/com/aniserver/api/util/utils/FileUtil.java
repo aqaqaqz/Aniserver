@@ -5,10 +5,10 @@ import com.aniserver.api.util.Const;
 import com.aniserver.api.util.Util;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class FileUtil {
     public List<Directory> scanDirectory(String path){
@@ -41,8 +41,27 @@ public class FileUtil {
         return list;
     }
 
-    public void makeDirectory(String path){
+    public boolean isExist(String path){
+        File file = new File(path);
+        return file.exists();
+    }
 
+    public void makeDirectory(String target, String name){
+        String path = target + "/" + name;
+        if(isExist(path)) return;
+
+        try {
+            Files.createDirectory(Path.of(path));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void removeDirectory(String path){
+        File f = new File(path);
+        if(!isExist(path)) return;
+
+        f.delete();
     }
 
     public void moveDirectory(String targetPath, String movePath){
