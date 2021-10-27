@@ -1,30 +1,28 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <Header></Header>
+  <SideMenu></SideMenu>
   <router-view />
+  <Footer></Footer>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { defineComponent } from "vue";
 
-#nav {
-  padding: 30px;
-}
+import Footer  from "@/views/common/Footer";
+import SideMenu  from "@/views/common/SideMenu";
+import Header  from "@/views/common/Header";
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+export default defineComponent({
+  name : "App",
+  components:{
+    Header,
+    Footer,
+    SideMenu
+  },
+  data(){
+    return {};
+  }
+})
+</script>
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<style scoped></style>
