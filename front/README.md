@@ -1,4 +1,4 @@
-# aniserver-fe
+# front
 
 ## Project setup
 ```
