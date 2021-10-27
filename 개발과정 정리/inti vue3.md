@@ -58,3 +58,10 @@ scripts": {
  - node_modules 폴더는 ignore 처리(vue프로젝트 생성 시 자동으로 등록됨)
 
  - http://localhost:9999 접속해서 Welcome화면이 보이면 성공
+
+ - esLint 규칙 설정
+~~~
+"rules": {
+    "prettier/prettier": [{ "endOfLine": "auto" }] //OS마다 EoF가 다르다.
+}
+~~~
