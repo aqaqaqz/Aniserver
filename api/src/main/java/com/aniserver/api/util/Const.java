@@ -4,7 +4,6 @@ public class Const {
     public static String TRUE = "Y";
     public static String FALSE = "N";
 
-
     public static String[] movieExtension = {"mp4", "mkv"};
     public static String[] USE_RAWS = {"[Ohys-Raws]", "[Leopard-Raws]"};
 
