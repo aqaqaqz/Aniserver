@@ -32,7 +32,7 @@
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">Login</button>
+          <button type="button" class="btn btn-outline-light me-2" id="loginBtn">Login</button>
           <button type="button" class="btn btn-warning">Sign-up</button>
         </div>
       </div>
@@ -42,7 +42,8 @@
 
 <script>
 import axios from 'axios';
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, onMounted} from "vue";
+import { useRouter } from 'vue-router'
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
@@ -50,7 +51,8 @@ import "bootstrap"
 export default defineComponent({
   name : "Header",
   data(){
-    let pageData = reactive({
+    const pageData = reactive({
+      router : useRouter(),
       folderList : []
     })
 
@@ -62,8 +64,11 @@ export default defineComponent({
         
         pageData.folderList.find(folder => folder.name == f.name.substr(0, 4)).subList.push(f);
       }
+    })
 
-      console.log(pageData.folderList);
+    onMounted(()=>{
+      let init = getInitFuncs(pageData);
+      init.initLoginBtn();
     })
 
     return {
@@ -71,6 +76,19 @@ export default defineComponent({
     };
   }
 })
+
+function getInitFuncs({router}){
+  return {
+    initLoginBtn : function(){
+      console.log(router)
+
+      const loginBtn = document.getElementById("loginBtn");
+      loginBtn.addEventListener('click', (e)=>{
+        router.push('Login');
+      })
+    }
+  }
+}
 </script>
 
 <style scoped></style>
