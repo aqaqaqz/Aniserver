@@ -32,7 +32,7 @@
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2" id="loginBtn">Login</button>
+          <button type="button" class="btn btn-outline-light me-2" id="loginPageBtn">Login</button>
           <button type="button" class="btn btn-warning">Sign-up</button>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default defineComponent({
 
     onMounted(()=>{
       let init = getInitFuncs(pageData);
-      init.initLoginBtn();
+      init.initLoginPageBtn();
     })
 
     return {
@@ -79,10 +79,10 @@ export default defineComponent({
 
 function getInitFuncs({router}){
   return {
-    initLoginBtn : function(){
+    initLoginPageBtn : function(){
       console.log(router)
 
-      const loginBtn = document.getElementById("loginBtn");
+      const loginBtn = document.getElementById("loginPageBtn");
       loginBtn.addEventListener('click', (e)=>{
         router.push('Login');
       })

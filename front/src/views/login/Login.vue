@@ -17,7 +17,7 @@
 
         <br/>
 
-        <button class="w-100 btn btn-lg btn-secondary" type="submit">Login</button>
+        <button class="w-100 btn btn-lg btn-secondary" type="submit" id="loginBtn">Login</button>
       </div>
     </div>
   </section>
@@ -25,14 +25,30 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 
 export default defineComponent({
   name : "Login",
   data(){
+    onMounted(()=>{
+      let init = getInitFuncs();
+      init.initLoginBtn();
+    });
+
     return {};
   }
 })
+
+function getInitFuncs(){
+  return {
+    initLoginBtn : function(){
+      const loginBtn = document.getElementById("loginBtn");
+      loginBtn.addEventListener('click', (e)=>{
+        console.log("login...");
+      })
+    }
+  }
+}
 </script>
 
 <style scoped></style>
