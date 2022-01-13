@@ -16,9 +16,14 @@ public class DirectoryController {
     @Autowired
     DirectoryService directoryService;
 
+    @GetMapping(value = "/search/directory")
+    public List<Directory> getSearchDirectoryList(@RequestParam(defaultValue="") String keyword) {
+        return directoryService.getSearchDirectoryList(keyword);
+    }
+
     @GetMapping(value = "/directory")
-    public List<Directory> getList(@RequestParam(defaultValue="") String keyword) {
-        return directoryService.getDirectoryList(keyword);
+    public Directory getDirectoryList(@RequestParam(defaultValue="") String path) {
+        return directoryService.getDirectoryList(path);
     }
 
     @PostMapping(value = "/directory/scan")

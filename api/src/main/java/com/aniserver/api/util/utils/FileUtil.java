@@ -7,12 +7,13 @@ import com.aniserver.api.util.Util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class FileUtil {
-    public List<Directory> scanDirectory(String path){
-        return scanDirectory(path, true);
+    public List<Directory> scanDirectory(String path, Map<String, Directory> directoryMap){
+        return scanDirectory(path, true, directoryMap);
     }
-    public List<Directory> scanDirectory(String path, boolean subList){
+    public List<Directory> scanDirectory(String path, boolean subList, Map<String, Directory> directoryMap){
         List<Directory> list = new ArrayList<>();
 
         File dir = new File(path);
@@ -30,11 +31,13 @@ public class FileUtil {
 
             if(Const.TRUE.equals(directoryYn)){
                 newDirectory.setType(Util.code.FILE_DIRECTORY);
-                if(subList) newDirectory.setSublist(scanDirectory(fullPath));
+                if(subList) newDirectory.setSublist(scanDirectory(fullPath, subList, directoryMap));
             }else{
                 newDirectory.setType(Util.code.FILE_VIDEO);
             }
 
+            System.out.println(newDirectory.getFullPath());
+            directoryMap.put(newDirectory.getFullPath(), newDirectory);
             list.add(newDirectory);
         }
         return list;

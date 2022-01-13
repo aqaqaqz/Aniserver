@@ -4,12 +4,12 @@ import com.aniserver.api.model.Directory;
 import com.aniserver.api.service.base.BaseService;
 import com.aniserver.api.util.Const;
 import com.aniserver.api.util.Util;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,12 +17,14 @@ import java.util.regex.Pattern;
 public class DirectoryService extends BaseService {
 
     private List<Directory> directoryList;
+    private Map<String, Directory> directoryMap;
 
     public void initDirectoryList(){
-        directoryList = Util.file.scanDirectory(Const.DEFAULT_PATH);
+        directoryMap = new HashMap<>();
+        directoryList = Util.file.scanDirectory(Const.DEFAULT_PATH, directoryMap);
     }
 
-    private List<Directory> searchList(List<Directory> list, String keyword){
+    private List<Directory> getSearchDirectoryList(List<Directory> list, String keyword){
         List<Directory> newList = new ArrayList<>();
         if(list == null) return newList;
 
@@ -31,7 +33,7 @@ public class DirectoryService extends BaseService {
                 newList.add(d);
             }else if(d.isFolder()){
                 Directory newDir = d.clone();
-                newDir.setSublist(searchList(d.getSublist(), keyword));
+                newDir.setSublist(getSearchDirectoryList(d.getSublist(), keyword));
                 if(!newDir.getSublist().isEmpty())
                     newList.add(newDir);
             }
@@ -40,18 +42,18 @@ public class DirectoryService extends BaseService {
         return newList;
     }
 
-    public List<Directory> getDirectoryList(String keyword){
+    public List<Directory> getSearchDirectoryList(String keyword){
         if(directoryList == null) initDirectoryList();
 
         if(keyword.isEmpty())
             return directoryList;
 
-        return searchList(directoryList, keyword);
+        return getSearchDirectoryList(directoryList, keyword);
     }
 
     public String getQuarterByTitle(String title){
         Pattern p = Pattern.compile(Const.ANIMATION_QUARTER_PATTERN);
-        for(Directory d : getDirectoryList("")) {
+        for(Directory d : getSearchDirectoryList("")) {
             Matcher matcher = p.matcher(d.getName());
             if (!matcher.find()) continue;
 
@@ -68,5 +70,10 @@ public class DirectoryService extends BaseService {
         }
 
         return find;
+    }
+
+    public Directory getDirectoryList(String path){
+        System.out.println("------->"+Const.DEFAULT_PATH+"/"+path);
+        return directoryMap.get(Const.DEFAULT_PATH+"/"+path);
     }
 }

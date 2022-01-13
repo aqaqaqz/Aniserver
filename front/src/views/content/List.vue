@@ -2,46 +2,47 @@
   <div class="my-3 p-3 bg-body rounded shadow-sm">
     <h6 class="border-bottom pb-2 mb-0">{{$route.params.path}}</h6>
 
-    <div class="d-flex text-muted pt-3">
-      <!-- <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg> -->
+    <div class="d-flex text-muted pt-3" v-for="(info, index) in pageData.pageList" v-bind:key="index">
       <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
         <div class="d-flex justify-content-between">
-          <strong class="text-gray-dark">Full Name Full Name Full Name Full Name Full Name Full Name</strong>
+          <strong class="text-gray-dark">{{info.name}}</strong>
         </div>
-        <span class="d-block">@username</span>
       </div>
     </div>
-
-    <div class="d-flex text-muted pt-3">
-      <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-        <div class="d-flex justify-content-between">
-          <strong class="text-gray-dark">Full Name Full Name Full Name Full Name Full Name Full Name</strong>
-        </div>
-        <span class="d-block">@username</span>
-      </div>
-    </div>
-
-    <div class="d-flex text-muted pt-3">
-      <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-        <div class="d-flex justify-content-between">
-          <strong class="text-gray-dark">Full Name Full Name Full Name Full Name Full Name Full Name</strong>
-        </div>
-        <span class="d-block">@username</span>
-      </div>
-    </div>
-    
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import axios from 'axios';
+import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
   name : "List",
   data(){
-    return {};
+
+    let pageData = reactive({
+      pageList : []
+    })
+
+    let initFunc = getInitFuncs({pageData});
+    initFunc.initPageList(this.$route.params.path);
+
+    return {
+      pageData
+    };
   }
 })
+
+function getInitFuncs({pageData}){
+  return {
+    initPageList : function(path){
+      axios.get('http://localhost:8080/api/directory?path='+path).then( res => {
+        pageData.pageList = res.data.sublist;
+        console.log(pageData.pageList)
+      })
+    }
+  }
+};
 </script>
 
 <style scoped></style>
