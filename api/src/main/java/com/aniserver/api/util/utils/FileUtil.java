@@ -36,7 +36,6 @@ public class FileUtil {
                 newDirectory.setType(Util.code.FILE_VIDEO);
             }
 
-            System.out.println(newDirectory.getFullPath());
             directoryMap.put(newDirectory.getFullPath(), newDirectory);
             list.add(newDirectory);
         }
