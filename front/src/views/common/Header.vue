@@ -74,7 +74,7 @@ function getInitFuncs({router, folderList}){
       if(path==null || path=="") continue;
 
       li.addEventListener("click", (e)=>{
-        router.push({name:'List', params:{path:path}});
+        router.push({name:'List', params:{path:'/'+path}});
       });
 
     }
@@ -82,7 +82,7 @@ function getInitFuncs({router, folderList}){
 
   return {
     initGnbMenu : async function (){
-      await axios.get('http://localhost:8080/api/search/directory').then(async res => {
+      await axios.get('http://localhost:8888/api/search/directory').then(async res => {
         for(let idx in res.data){
           let f = res.data[idx];
           let folder = folderList.find(folder => folder.name == f.name.substr(0, 4));

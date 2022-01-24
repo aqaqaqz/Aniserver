@@ -21,7 +21,7 @@ public class DirectoryService extends BaseService {
 
     public void initDirectoryList(){
         directoryMap = new HashMap<>();
-        directoryList = Util.file.scanDirectory(Const.DEFAULT_PATH, directoryMap);
+        directoryList = Util.file.scanDirectory("", directoryMap);
     }
 
     private List<Directory> getSearchDirectoryList(List<Directory> list, String keyword){
@@ -73,7 +73,7 @@ public class DirectoryService extends BaseService {
     }
 
     public Directory getDirectoryList(String path){
-        System.out.println("------->"+Const.DEFAULT_PATH+"/"+path);
-        return directoryMap.get(Const.DEFAULT_PATH+"/"+path);
+        System.out.println("------->"+path);
+        return directoryMap.get(path);
     }
 }

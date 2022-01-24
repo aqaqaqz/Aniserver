@@ -16,11 +16,11 @@ public class FileUtil {
     public List<Directory> scanDirectory(String path, boolean subList, Map<String, Directory> directoryMap){
         List<Directory> list = new ArrayList<>();
 
-        File dir = new File(path);
+        File dir = new File(Const.DEFAULT_PATH+path);
         File files[] = dir.listFiles();
 
         for (File f : files) {
-            String fullPath = path + "/" + f.getName();
+            String nowPath = path + "/" + f.getName();
             String directoryYn = f.isFile()? Const.FALSE:Const.TRUE;
 
             Directory newDirectory = Directory.builder()
@@ -31,12 +31,12 @@ public class FileUtil {
 
             if(Const.TRUE.equals(directoryYn)){
                 newDirectory.setType(Util.code.FILE_DIRECTORY);
-                if(subList) newDirectory.setSublist(scanDirectory(fullPath, subList, directoryMap));
+                if(subList) newDirectory.setSublist(scanDirectory(nowPath, subList, directoryMap));
             }else{
                 newDirectory.setType(Util.code.FILE_VIDEO);
             }
 
-            directoryMap.put(newDirectory.getFullPath(), newDirectory);
+            directoryMap.put(nowPath, newDirectory);
             list.add(newDirectory);
         }
         return list;

@@ -53,7 +53,7 @@ export default defineComponent({
 function getInitFuncs({pageData}){
   return {
     initPageList : async function(path){
-      await axios.get('http://localhost:8080/api/directory?path='+path).then( res => {
+      await axios.get('http://localhost:8888/api/directory?path='+path).then( res => {
         console.log(res);
         pageData.pageList = res.data.sublist;
       })
