@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Main from "../views/main/Main.vue";
 import Login from "../views/login/Login.vue";
 import List from "../views/content/List.vue";
+import Player from "../views/content/Player.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,6 +19,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/list/:path",
     name: "List",
     component: List,
+    props: true
+  },
+  {
+    path: "/player/:path",
+    name: "Player",
+    component: Player,
     props: true
   },
 ];

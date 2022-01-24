@@ -7,7 +7,7 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" id="gnbMenu">
-          <li><a href="javascript:void(0);" class="nav-link px-2 text-secondary">Home</a></li>
+          <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
 
           <li v-for="year in pageData.folderList" v-bind:key="year.name">
             <div class="dropdown">
