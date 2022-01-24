@@ -73,7 +73,6 @@ public class DirectoryService extends BaseService {
     }
 
     public Directory getDirectoryList(String path){
-        System.out.println("------->"+path);
         return directoryMap.get(path);
     }
 }

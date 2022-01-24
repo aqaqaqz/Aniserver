@@ -16,6 +16,8 @@
 </template>
 
 <script>
+//content 접근시 로그인체크로직 추가 필요함.
+
 import { defineComponent } from "vue";
 
 export default defineComponent({
