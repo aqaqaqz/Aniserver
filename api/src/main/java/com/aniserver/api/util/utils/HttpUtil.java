@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -157,5 +158,14 @@ public class HttpUtil {
         }
 
         return json;
+    }
+
+    public Map<String, Object> makeResponse(String code, String msg){
+        Map<String, Object> res = new HashMap();
+
+        res.put("code", code);
+        res.put("msg", msg);
+
+        return res;
     }
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 
 @Repository
 public class UserDao extends BaseDao {
-    public User getUserInfo() throws IOException {
-		return new User();
+    public User getUserInfo(User user) throws IOException {
+		return getSession().selectOne("user.getUserInfo", user);
 	}
 }

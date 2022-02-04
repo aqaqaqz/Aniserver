@@ -26,6 +26,7 @@
 
 <script>
 import { defineComponent, onMounted } from "vue";
+import axios from 'axios';
 
 export default defineComponent({
   name : "Login",
@@ -44,7 +45,27 @@ function getInitFuncs(){
     initLoginBtn : function(){
       const loginBtn = document.getElementById("loginBtn");
       loginBtn.addEventListener('click', (e)=>{
-        console.log("login...");
+        let id = document.getElementById("loginId").value;
+        let passwd = document.getElementById("loginPasswd").value;
+
+        if(id==null || id==""){
+          alert("아이디를 입력해주세요");
+          return;
+        }
+        if(passwd==null || passwd==""){
+          alert("비밀번호를 입력해주세요");
+          return;
+        }
+
+        let param = {
+          id : id,
+          passwd : passwd
+        };
+
+        axios.post('http://localhost:8888/api/user/login', param).then( res => {
+          location.href = '/';
+
+        })
       })
     }
   }

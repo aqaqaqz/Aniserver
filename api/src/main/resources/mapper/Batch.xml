@@ -3,7 +3,7 @@
 
 <mapper namespace="batch">
 
-    <select id="getAllBatchList" resultType="com.aniserver.api.model.Batch">
+    <select id="getAllBatchList" resultType="com.aniserver.api.model.db.Batch">
         select *
           from batch
     </select>
