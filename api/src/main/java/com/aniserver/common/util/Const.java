@@ -1,4 +1,4 @@
-package com.aniserver.api.util;
+package com.aniserver.common.util;
 
 public class Const {
     public static final String TRUE = "Y";

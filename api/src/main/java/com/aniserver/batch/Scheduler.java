@@ -1,4 +1,4 @@
-package com.aniserver.api.batch;
+package com.aniserver.batch;
 
 import org.springframework.scheduling.annotation.Scheduled;
 

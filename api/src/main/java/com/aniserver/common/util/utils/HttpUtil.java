@@ -1,4 +1,4 @@
-package com.aniserver.api.util.utils;
+package com.aniserver.common.util.utils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -158,14 +158,5 @@ public class HttpUtil {
         }
 
         return json;
-    }
-
-    public Map<String, Object> makeResponse(String code, String msg){
-        Map<String, Object> res = new HashMap();
-
-        res.put("code", code);
-        res.put("msg", msg);
-
-        return res;
     }
 }

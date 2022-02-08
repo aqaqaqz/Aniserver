@@ -1,6 +1,6 @@
-package com.aniserver.api.batch.Job;
+package com.aniserver.batch.Job;
 
-import com.aniserver.api.util.Util;
+import com.aniserver.common.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONArray;
