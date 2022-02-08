@@ -31,8 +31,6 @@
 
     <mappers>
         <mapper resource="mapper/Base.xml" />
-        <mapper resource="mapper/Batch.xml" />
-        <mapper resource="mapper/User.xml" />
     </mappers>
 
 </configuration>
