@@ -7,9 +7,7 @@ import com.aniserver.common.util.Utils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DirectoryService extends BaseService {
@@ -85,8 +83,31 @@ public class DirectoryService extends BaseService {
         return Const.CODE_FILE_TYPE_NOTHING;
     }
 
-    private Directory search(String keywrod){
-        return directoryMap.get(Const.DEFAULT_PATH);
+    /**
+     * 키워드에 맞는 결과들을 조회한다.
+     */
+    private Directory search(String keyword){
+        Directory result = new Directory();
+
+        for(Directory d : searchDirectoryList("").getLower())
+            findKeyword(result, d, keyword);
+
+        return result;
+    }
+
+    private void findKeyword(Directory rst, Directory dir, String keyword){
+        if(dir.getName().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+            Directory clone = dir.clone();
+            clone.setLower(new ArrayList<>()); //불필요한 데이터 제거
+            rst.getSearch().add(clone);
+            return;
+        }
+
+        if(Const.CODE_FILE_TYPE_FOLDER.equals(dir.getType())){
+            for(Directory lower : dir.getLower()){
+                findKeyword(rst, lower, keyword);
+            }
+        }
     }
 
     /**
