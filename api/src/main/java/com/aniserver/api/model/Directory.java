@@ -1,92 +1,15 @@
 package com.aniserver.api.model;
 
-import com.aniserver.api.util.Const;
-import com.aniserver.api.util.Util;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-@Getter
-@Setter
-@Builder
-public class Directory implements Cloneable {
-    private String path;
-    private String name;
-    private String type;
-    private List<Directory> sublist;
-
-    @Override
-    public Directory clone() {
-        try {
-            return (Directory) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
-    }
-
-    private List<String> getOvaTitlePattern(){
-        List<String> pattern = new ArrayList<>();
-        for(String extension : Const.movieExtension){
-            pattern.add(Const.OVA_TITLE_PATTERN+extension);
-        }
-
-        return pattern;
-    }
-
-    private String getOvaTitle(String title){
-        for(String p : getOvaTitlePattern()){
-            Pattern pattern = Pattern.compile(p);
-            Matcher matcher = pattern.matcher(title);
-            if(matcher.find()) {
-                title = title.substring(0, matcher.start());
-                break;
-            }
-        }
-        return title;
-    }
-
-    public String getFullPath(){
-        return path+"/"+name;
-    }
-
-    public int getEpsode(){
-        int episodeNum = -1;
-
-        Pattern pattern = Pattern.compile(Const.EPISODE_PATTERN);
-        Matcher matcher = pattern.matcher(name);
-        if(matcher.find()) {
-            episodeNum = Integer.parseInt(""+matcher.group().replace(Const.EPISODE_SEPERATOR, ""));
-        }
-
-        return episodeNum;
-    }
-
-    public String getTitle(){
-        if(isFolder()) return name;
-
-        String title = name;
-        for(String raw : Const.USE_RAWS){
-            title = title.replace(raw, "");
-        }
-
-        Pattern pattern = Pattern.compile(Const.EPISODE_PATTERN);
-        Matcher matcher = pattern.matcher(title);
-        if(matcher.find()) {
-            title = title.substring(0, matcher.start());
-        }else{
-            title = getOvaTitle(title);
-        }
-        title = title.trim();
-
-        return title;
-    }
-
-    public boolean isFolder(){
-        return Util.code.FILE_DIRECTORY.equals(type);
-    }
+@Data
+public class Directory {
+    private String name = ""; //이름
+    private String path = ""; //이름을 포함한 전체 경로
+    private String type = ""; //폴더, 동영상, 자막
+    private List<Directory> lower = new ArrayList<>(); //하위 리스트
+    private List<String> subtitle = new ArrayList<>(); //자막 리스트
 }

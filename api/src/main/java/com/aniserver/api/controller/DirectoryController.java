@@ -1,11 +1,14 @@
 package com.aniserver.api.controller;
 
-import com.aniserver.api.exception.EmptyParamException;
 import com.aniserver.api.model.Directory;
+import com.aniserver.api.model.Result;
 import com.aniserver.api.service.DirectoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -16,23 +19,16 @@ public class DirectoryController {
     @Autowired
     DirectoryService directoryService;
 
-    @GetMapping(value = "/search/directory")
-    public List<Directory> getSearchDirectoryList(@RequestParam(defaultValue="") String keyword) {
-        return directoryService.getSearchDirectoryList(keyword);
+    @GetMapping(value = "/directory/search")
+    public ResponseEntity<?> searchDirectoryList(@RequestParam(defaultValue="") String keyword) {
+        Directory data = directoryService.searchDirectoryList(keyword);
+        return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
-    @GetMapping(value = "/directory")
-    public Directory getDirectoryList(@RequestParam(defaultValue="") String path) {
-        return directoryService.getDirectoryList(path);
+    @GetMapping(value = "/directory/divide")
+    public ResponseEntity<?> divideDirectoryList(@RequestParam(defaultValue="") List<String> pathList) {
+        int successCnt = directoryService.divideDirectoryList(pathList);
+        return ResponseEntity.status(HttpStatus.OK).body(new Result(pathList.size(), successCnt));
     }
 
-    @PostMapping(value = "/directory/scan")
-    public void scan() {
-        directoryService.initDirectoryList();
-    }
-
-    @PutMapping(value = "/directory/move")
-    public void move(@RequestBody List<String> dirList) throws EmptyParamException {
-        //directoryService.movePath(dirList);
-    }
 }

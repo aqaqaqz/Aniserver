@@ -1,6 +1,8 @@
-package com.aniserver.api.batch.Job;
+package com.aniserver.batch.Job;
 
-import com.aniserver.api.util.Util;
+import com.aniserver.common.util.Utils;
+import lombok.Getter;
+import lombok.Setter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.quartz.Job;
@@ -16,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
 public class OhysDownload implements Job {
     private final String def = "empty";
     private Map<String, String> header;
@@ -30,41 +34,17 @@ public class OhysDownload implements Job {
         header.put("User-Agent", "Mozilla/5.0");
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getDownPath() {
-        return downPath;
-    }
-
-    public void setDownPath(String downPath) {
-        this.downPath = downPath;
-    }
-
-    public String getDownUrl() {
-        return downUrl;
-    }
-
-    public void setDownUrl(String downUrl) {
-        this.downUrl = downUrl;
-    }
-
     private JSONArray getAniList(){
 
         String data = null;
         try {
             JSONObject param = new JSONObject();
-            data = Util.http.api(url, "GET", header, param);
+            data = Utils.http.api(url, "GET", header, param);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return Util.http.convertStringToJsonArray(data);
+        return Utils.http.convertStringToJsonArray(data);
     }
 
     private void downloadTorrent(JSONArray jsonArr) {
@@ -78,7 +58,7 @@ public class OhysDownload implements Job {
             HttpURLConnection connection = null;
             try {
                 JSONObject param = new JSONObject();
-                connection = Util.http.getConnection(url, "GET", header, param);
+                connection = Utils.http.getConnection(url, "GET", header, param);
 
                 InputStream in = connection.getInputStream();
                 Path p = Paths.get(path);
