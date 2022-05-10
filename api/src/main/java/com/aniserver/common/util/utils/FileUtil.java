@@ -1,48 +1,63 @@
 package com.aniserver.common.util.utils;
 
-import com.aniserver.api.model.Directory;
-import com.aniserver.common.Const;
+import com.aniserver.common.util.Msg;
+import com.aniserver.common.util.exception.FileException;
 
 import java.io.File;
-import java.util.ArrayList;
 
 public class FileUtil {
-    public boolean isFolder(){
-        return true;
-    }
-
-    public Directory getDirectory(String path) {
-        Directory dir = new Directory();
-        dir.setSublist(new ArrayList<>());
-
-        File files = new File(Const.DEFAULT_PATH+path);
-        if(files.isFile()){
-            dir.setType(Const.FILE_TYPE_FOLDER);
-            for (File f : files.listFiles())
-                dir.getSublist().add(getDirectory(path+"/"+f.getName()));
-        }else{
-            String type = getFileType(files);
-            if(!Const.FILE_TYPE_MOVIE.equals(type)) return null;
-
-            dir.setType(Const.FILE_TYPE_MOVIE);
-            // 자막목록 작성 필요
-            // dir.setSubtitle();
+    public boolean isExist(String path){
+        File file = null;
+        try{
+            file = new File(path);
+        }catch(Exception e){
+            return false;
         }
-        dir.setName(files.getName());
-        dir.setPath(path);
 
-        return dir;
+        return file.exists();
     }
 
-    private String getFileType(File file){
-        if(file.isFile()) return Const.FILE_TYPE_FOLDER;
+    public File getFileInfo(String path){
+        if(!this.isExist(path))
+            throw new FileException(Msg.FILE_UTIL_ERROR_NOT_EXIST_PATH);
 
-        for(String ext : Const.FILE_MOVIE_EXTENDS)
-            if(file.getName().indexOf(ext) > -1) return Const.FILE_TYPE_MOVIE;
+        File file = new File(path);
+        return file;
+    }
 
-        for(String ext : Const.FILE_SUBTITLE_EXTENDS)
-            if(file.getName().indexOf(ext) > -1) return Const.FILE_TYPE_SUBTITLE;
+    public void makeDirectory(String path) {
+        if(isExist(path)) return;
 
-        return Const.FILE_TYPE_NOT_ALLOWED;
+        File f = new File(path);
+        f.mkdir();
+    }
+
+    public void removeDirectory(String path) throws FileException {
+        if(!isExist(path))
+            throw new FileException(Msg.FILE_UTIL_ERROR_NOT_EXIST_PATH);
+
+        File f = new File(path);
+        f.delete();
+    }
+
+    public void moveDirectory(String target, String move){
+        if(!isExist(target))
+            throw new FileException(Msg.FILE_UTIL_ERROR_NOT_EXIST_PATH);
+
+        if(isExist(move))
+            throw new FileException(Msg.FILE_UTIL_ERROR_EXIST_PATH);
+
+        File t = new File(target);
+        File m = new File(move);
+        t.renameTo(m);
+    }
+
+    public String getExtension(String name){
+        String extension = "";
+
+        for(int i=name.length()-1;i>=0&&name.charAt(i)!='.';i--)
+            extension = name.charAt(i) + extension;
+
+        return extension;
     }
 }

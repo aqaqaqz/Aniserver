@@ -1,17 +1,33 @@
 package com.aniserver.common;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Const {
+    public static final String TRUE = "Y";
+    public static final String FALSE = "N";
 
+    public static final List<String> ABLE_MOVIE_EXTENSION = Arrays.asList("mp4", "mkv");
+    public static final List<String> ABLE_SUBTITLE_EXTENSION = Arrays.asList("smi", "ass", "srt");
+    public static final List<String> USE_RAWS = Arrays.asList("[Ohys-Raws]", "[Leopard-Raws]");
 
-    public final static String FILE_TYPE_FOLDER = "F";
-    public final static String FILE_TYPE_MOVIE = "M";
-    public final static String[] FILE_MOVIE_EXTENDS = {".mp4", ".mkv"};
-    public final static String FILE_TYPE_SUBTITLE = "F";
-    public final static String[] FILE_SUBTITLE_EXTENDS = {".smi", ".ass", ".srt"};
-    public final static String FILE_TYPE_NOT_ALLOWED = "INVALID";
+    public static final String EPISODE_SEPERATOR = " - ";
+    public static final String EPISODE_PATTERN = EPISODE_SEPERATOR + "[0-9]{1,3}";
+    public static final String ANIMATION_QUARTER_PATTERN = "[0-9]{4}-[0-9]{1}";
+    public static final String OVA_TITLE_PATTERN = "\\(.+\\).";
 
-    public final static String MSG_AUTH_ERROR = "invalid auth";
-    public final static String MSG_SERVER_ERROR = "not expected error";
+    public static final String EMPTY = "EMPTY";
 
-    public static final String DEFAULT_PATH = "/";
+    public static final String DEFAULT_PATH = "/Users/lsh/Documents/aniserver test";
+
+    public final static String LOGIN_SESSION_NAME = "member";
+
+    public final static String HTTP_SUCCESS_CODE = "200";
+    public final static String HTTP_REQUEST_ERROR_CODE = "400";
+    public final static String HTTP_SERVER_ERROR_CODE = "200";
+
+    public final static String CODE_FILE_TYPE_FOLDER = "F";
+    public final static String CODE_FILE_TYPE_MOVIE = "M";
+    public final static String CODE_FILE_TYPE_SUBTITLE = "S";
+    public final static String CODE_FILE_TYPE_NOTHING = "N";
 }
