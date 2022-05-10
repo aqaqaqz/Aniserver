@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,6 +16,9 @@ public class DirectoryService extends BaseService {
 
     private Map<String, Directory> directoryMap = new HashMap<>();
 
+    /**
+     * 디렉터리를 탐색한다.
+     */
     public Directory searchDirectoryList(String keyword){
         if(directoryMap.isEmpty()) initDirectoryMap();
 
@@ -23,11 +27,17 @@ public class DirectoryService extends BaseService {
         return search(keyword);
     }
 
+    /**
+     * 디렉터리 맵 초기화
+     */
     private void initDirectoryMap(){
         directoryMap = new HashMap<>();
         makeDirectoryMap(Const.DEFAULT_PATH);
     }
 
+    /**
+     * 검색 대상이 될 디렉터리를 전체 탐색하여 맵에 저장시켜둔다.
+     */
     private Directory makeDirectoryMap(String path){
         File f = Utils.file.getFileInfo(path);
         String type = getType(f);
@@ -59,6 +69,10 @@ public class DirectoryService extends BaseService {
         return directoryMap.get(path);
     }
 
+    /**
+     * 파일의 타입을 구한다
+     * 동영상, 자막, 폴더, 기타
+     */
     private String getType(File f){
         if(f.isDirectory()) return Const.CODE_FILE_TYPE_FOLDER;
 
@@ -73,5 +87,56 @@ public class DirectoryService extends BaseService {
 
     private Directory search(String keywrod){
         return directoryMap.get(Const.DEFAULT_PATH);
+    }
+
+    /**
+     * 경로 리스트를 입력받아 yyyy-q > title 형태로 분류해준다.
+     */
+    public int divideDirectoryList(List<String> pathList) {
+        int cnt = 0;
+
+        for(String path : pathList){
+            try {
+                File f = Utils.file.getFileInfo(path);
+                divideAnimation(f);
+                cnt++;
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return cnt;
+    }
+
+    private void divideAnimation(File f){
+        String quarter = getQuarterUseTitle(f.getName());
+        String title = Utils.string.getAnimatinoTitle(f.getName());
+
+        String quarterPath = Const.DEFAULT_PATH + quarter;
+        String titlePath = quarterPath + "/" + title;
+
+        if(Const.EMPTY.equals(quarter)) {
+            quarter = Utils.date.getYearAndQuarter();
+            quarterPath = Const.DEFAULT_PATH + quarter;
+            titlePath = quarterPath + "/" + title;
+
+            if(!Utils.file.isExist(quarterPath))
+                Utils.file.makeDirectory(quarterPath);
+        }
+
+        if(!Utils.file.isExist(titlePath))
+            Utils.file.makeDirectory(titlePath);
+
+        Utils.file.moveDirectory(f.getPath(), titlePath+"/"+f.getName());
+    }
+
+    private String getQuarterUseTitle(String title){
+        for(Directory q : searchDirectoryList("").getLower()){
+            for(Directory t : q.getLower()){
+                if(t.getName().equals(title)) return q.getName();
+            }
+        }
+
+        return Const.EMPTY;
     }
 }

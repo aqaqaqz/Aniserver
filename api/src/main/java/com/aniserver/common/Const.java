@@ -18,7 +18,7 @@ public class Const {
 
     public static final String EMPTY = "EMPTY";
 
-    public static final String DEFAULT_PATH = "/Users/lsh/Documents/aniserver test";
+    public static final String DEFAULT_PATH = "/Users/lsh/Documents/aniserver test/";
 
     public final static String LOGIN_SESSION_NAME = "member";
 
