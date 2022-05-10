@@ -2,7 +2,6 @@ package com.aniserver.common.util.utils;
 
 import com.aniserver.api.model.Directory;
 import com.aniserver.common.Const;
-import com.aniserver.common.exception.DirectoryException;
 
 import java.io.File;
 import java.util.ArrayList;

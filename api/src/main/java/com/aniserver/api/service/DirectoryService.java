@@ -2,7 +2,7 @@ package com.aniserver.api.service;
 
 import com.aniserver.api.model.Directory;
 import com.aniserver.api.service.base.BaseService;
-import com.aniserver.common.util.Util;
+import com.aniserver.common.util.Utils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class DirectoryService extends BaseService {
 
     public Directory getDirectory(String path){
         if(!directoryMap.containsKey(path)) {
-            Directory dir = Util.file.getDirectory(path);
+            Directory dir = Utils.file.getDirectory(path);
             directoryMap.put(path, dir);
         }
 

@@ -1,6 +1,6 @@
 package com.aniserver.batch.Job;
 
-import com.aniserver.common.util.Util;
+import com.aniserver.common.util.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONArray;
@@ -39,12 +39,12 @@ public class OhysDownload implements Job {
         String data = null;
         try {
             JSONObject param = new JSONObject();
-            data = Util.http.api(url, "GET", header, param);
+            data = Utils.http.api(url, "GET", header, param);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return Util.http.convertStringToJsonArray(data);
+        return Utils.http.convertStringToJsonArray(data);
     }
 
     private void downloadTorrent(JSONArray jsonArr) {
@@ -58,7 +58,7 @@ public class OhysDownload implements Job {
             HttpURLConnection connection = null;
             try {
                 JSONObject param = new JSONObject();
-                connection = Util.http.getConnection(url, "GET", header, param);
+                connection = Utils.http.getConnection(url, "GET", header, param);
 
                 InputStream in = connection.getInputStream();
                 Path p = Paths.get(path);
