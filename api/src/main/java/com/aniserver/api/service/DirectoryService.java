@@ -148,7 +148,16 @@ public class DirectoryService extends BaseService {
         if(!Utils.file.isExist(titlePath))
             Utils.file.makeDirectory(titlePath);
 
+        //자막 파일이 존재하면 이동
+        String extension = Utils.file.getExtension(f.getPath());
         Utils.file.moveDirectory(f.getPath(), titlePath+"/"+f.getName());
+        for(String subExtension : Const.ABLE_SUBTITLE_EXTENSION){
+            String subFullPath = f.getPath().replace("."+extension, "."+subExtension);
+            if(Utils.file.isExist(subFullPath)){
+                File sub = Utils.file.getFileInfo(subFullPath);
+                Utils.file.moveDirectory(sub.getPath(), titlePath+"/"+sub.getName());
+            }
+        }
     }
 
     private String getQuarterUseTitle(String title){
