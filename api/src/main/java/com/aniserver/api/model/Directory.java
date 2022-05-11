@@ -1,7 +1,10 @@
 package com.aniserver.api.model;
 
+import com.aniserver.common.Const;
+import com.aniserver.common.util.Utils;
 import lombok.Data;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,10 @@
 package com.aniserver.api.controller;
 
+import com.aniserver.api.exception.InvalidPageException;
 import com.aniserver.api.model.Directory;
 import com.aniserver.api.model.Result;
 import com.aniserver.api.service.DirectoryService;
+import com.aniserver.common.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,15 @@ public class DirectoryController {
     @Autowired
     DirectoryService directoryService;
 
+    @GetMapping(value = "/directory/path")
+    public ResponseEntity<?> searchDirectoryListUsePath(@RequestParam(defaultValue="") String path) throws InvalidPageException {
+        Directory data = directoryService.searchDirectoryListUsePath(path);
+        return ResponseEntity.status(HttpStatus.OK).body(data);
+    }
+
     @GetMapping(value = "/directory/search")
-    public ResponseEntity<?> searchDirectoryList(@RequestParam(defaultValue="") String keyword) {
-        Directory data = directoryService.searchDirectoryList(keyword);
+    public ResponseEntity<?> searchDirectoryListKeyword(@RequestParam(defaultValue="") String keyword) {
+        Directory data = directoryService.searchDirectoryListUseKeyword(keyword);
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 

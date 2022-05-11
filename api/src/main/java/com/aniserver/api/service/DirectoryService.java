@@ -1,8 +1,10 @@
 package com.aniserver.api.service;
 
+import com.aniserver.api.exception.InvalidPageException;
 import com.aniserver.api.model.Directory;
 import com.aniserver.api.service.base.BaseService;
 import com.aniserver.common.Const;
+import com.aniserver.common.util.Msg;
 import com.aniserver.common.util.Utils;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,47 @@ public class DirectoryService extends BaseService {
     private Map<String, Directory> directoryMap = new HashMap<>();
 
     /**
-     * 디렉터리를 탐색한다.
+     * 경로를 통해 하위 디렉터리를 탐색한다.
      */
-    public Directory searchDirectoryList(String keyword){
+    public Directory searchDirectoryListUsePath(String path) throws InvalidPageException {
+        if(!Utils.file.isExist(path))
+            throw new InvalidPageException(Msg.PAGE_ERROR_NOT_EXIST_PATH);
+
+        File f = Utils.file.getFileInfo(path);
+        String type = getType(f);
+        if(!Const.CODE_FILE_TYPE_FOLDER.equals(type))
+            throw new InvalidPageException(Msg.PAGE_ERROR_NOT_INVALID_ACCESS);
+
+        Directory d = new Directory();
+        d.setName(f.getName());
+        d.setType(type);
+        d.setPath(f.getPath());
+        for(File lower : f.listFiles()){
+            String lowerType = getType(lower);
+            if(!Const.CODE_FILE_TYPE_FOLDER.equals(lowerType) && !Const.CODE_FILE_TYPE_MOVIE.equals(lowerType))
+                continue;
+
+            Directory ld = new Directory();
+            ld.setName(lower.getName());
+            ld.setType(lowerType);
+            ld.setSubtitle(getSubtitleList(lower));
+            d.getLower().add(ld);
+        }
+        d.getLower().sort((d1, d2)->{
+            if(d1.getType().equals(d2.getType()))
+                return d1.getName().compareTo(d2.getName());
+
+            if(Const.CODE_FILE_TYPE_FOLDER.equals(d1.getType())) return -1;
+            return 1;
+        });
+
+        return d;
+    }
+
+    /**
+     * 키워드로 디렉터리를 루트부터 탐색한다.
+     */
+    public Directory searchDirectoryListUseKeyword(String keyword){
         if(directoryMap.isEmpty()) initDirectoryMap();
 
         if("".equals(keyword)) return directoryMap.get(Const.DEFAULT_PATH);
@@ -55,13 +95,8 @@ public class DirectoryService extends BaseService {
             }
         }
 
-        if(Const.CODE_FILE_TYPE_MOVIE.equals(temp.getType())){
-            for(String sub : Const.ABLE_SUBTITLE_EXTENSION){
-                String extension = Utils.file.getExtension(f.getName());
-                if(Utils.file.isExist(path.replaceAll("."+extension, "."+sub)))
-                    temp.getSubtitle().add(sub);
-            }
-        }
+        if(Const.CODE_FILE_TYPE_MOVIE.equals(temp.getType()))
+            temp.setSubtitle(getSubtitleList(f));
 
         directoryMap.put(path, temp);
         return directoryMap.get(path);
@@ -84,12 +119,28 @@ public class DirectoryService extends BaseService {
     }
 
     /**
+     * 지원가능한 자막파일의 리스트를 생성한다.
+     */
+    private List<String> getSubtitleList(File f){
+        List<String> subtitleList = new ArrayList<>();
+        if(!Const.CODE_FILE_TYPE_MOVIE.equals(getType(f))) return subtitleList;
+
+        for(String sub : Const.ABLE_SUBTITLE_EXTENSION){
+            String extension = Utils.file.getExtension(f.getName());
+            if(Utils.file.isExist(f.getPath().replaceAll("."+extension, "."+sub)))
+                subtitleList.add(sub);
+        }
+
+        return subtitleList;
+    }
+
+    /**
      * 키워드에 맞는 결과들을 조회한다.
      */
     private Directory search(String keyword){
         Directory result = new Directory();
 
-        for(Directory d : searchDirectoryList("").getLower())
+        for(Directory d : searchDirectoryListUseKeyword("").getLower())
             findKeyword(result, d, keyword);
 
         return result;
@@ -161,7 +212,7 @@ public class DirectoryService extends BaseService {
     }
 
     private String getQuarterUseTitle(String title){
-        for(Directory q : searchDirectoryList("").getLower()){
+        for(Directory q : searchDirectoryListUseKeyword("").getLower()){
             for(Directory t : q.getLower()){
                 if(t.getName().equals(title)) return q.getName();
             }
