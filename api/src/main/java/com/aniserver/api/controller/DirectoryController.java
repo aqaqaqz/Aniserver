@@ -22,7 +22,7 @@ public class DirectoryController {
 
     @GetMapping(value = "/directory/path")
     public ResponseEntity<?> searchDirectoryListUsePath(@RequestParam(defaultValue="") String path) throws InvalidPageException {
-        Directory data = directoryService.searchDirectoryListUsePath(path);
+        Directory data = directoryService.searchDirectoryListUsePath(Const.DEFAULT_PATH + path);
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 

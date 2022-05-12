@@ -9,22 +9,22 @@
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" id="gnbMenu">
           <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
 
-          <li v-for="year in pageData.folderList" v-bind:key="year.name">
-            <div class="dropdown">
-              <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                {{year.name}}
+          <li v-for="folder in pageData.folderList" v-bind:key="folder.name">
+            <div class="dropdown" v-if="folder.lower.length > 0">
+              <button class="btn btn-dark dropdown-toggle" type="button" :id="folder.name" data-bs-toggle="dropdown" aria-expanded="false">
+                {{folder.name}}
               </button>
-              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                <li v-for="quarter in year.subList" v-bind:key="quarter.name">
+              <ul class="dropdown-menu dropdown-menu-dark" :aria-labelledby="folder.name">
+                <li v-for="quarter in folder.lower" v-bind:key="quarter.name">
                   <a class="dropdown-item path-link" href="javascript:void(0);">{{quarter.name}}</a>
                 </li>
               </ul>
             </div>
-          </li>
 
-          <li><a href="javascript:void(0);" class="nav-link px-2 text-white path-link">ETC</a></li>
-          <li><a href="javascript:void(0);" class="nav-link px-2 text-white path-link">TEMP</a></li>
-          <li><a href="javascript:void(0);" class="nav-link px-2 text-white path-link">DOWN</a></li>
+            <a href="javascript:void(0);" class="nav-link px-2 text-white path-link" v-if="folder.lower.length == 0">
+              {{folder.name}}
+            </a>
+          </li>
         </ul>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -82,15 +82,32 @@ function getInitFuncs({router, folderList}){
 
   return {
     initGnbMenu : async function (){
-      await axios.get('http://localhost:8888/api/search/directory').then(async res => {
-        for(let idx in res.data){
-          let f = res.data[idx];
-          let folder = folderList.find(folder => folder.name == f.name.substr(0, 4));
-          if(!folder) folderList.push({name:f.name.substr(0, 4), subList : []}); 
-          
-          folderList.find(folder => folder.name == f.name.substr(0, 4)).subList.push(f);
+      await axios.get('http://localhost:8888/api/directory/path').then(async res => {
+/*
+        folderList = [{
+          'yyyy':{
+            subList : []
+          }
+        }]
+*/
+        let folderObject = {};
+        const quarterPattern = /\d{4}-\d{1}/;
+        for(let folder of res.data.lower){
+          if(quarterPattern.exec(folder.name)){
+            let year = folder.name.substring(0, 4);
+            if(!folderObject[year]) folderObject[year] = [];
+            folderObject[year].push({name : folder.name});
+          }else{
+            folderObject[folder.name] = [];
+          }
         }
-      })
+
+        for(let key in folderObject)
+          folderList.push({
+            name : key,
+            lower : folderObject[key]
+          });
+      });
 
       await initClickGnbMenu();
     },

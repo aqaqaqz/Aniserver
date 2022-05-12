@@ -31,7 +31,7 @@ public class DirectoryService extends BaseService {
         Directory d = new Directory();
         d.setName(f.getName());
         d.setType(type);
-        d.setPath(f.getPath());
+        d.setPath(f.getPath().replace(Const.DEFAULT_PATH, ""));
         for(File lower : f.listFiles()){
             String lowerType = getType(lower);
             if(!Const.CODE_FILE_TYPE_FOLDER.equals(lowerType) && !Const.CODE_FILE_TYPE_MOVIE.equals(lowerType))
@@ -40,6 +40,7 @@ public class DirectoryService extends BaseService {
             Directory ld = new Directory();
             ld.setName(lower.getName());
             ld.setType(lowerType);
+            ld.setPath(lower.getPath().replace(Const.DEFAULT_PATH, ""));
             ld.setSubtitle(getSubtitleList(lower));
             d.getLower().add(ld);
         }
