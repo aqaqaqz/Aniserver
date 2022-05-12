@@ -114,7 +114,7 @@ function getInitFuncs({router, folderList}){
     initLoginPageBtn : function(){
       const loginBtn = document.getElementById("loginPageBtn");
       loginBtn.addEventListener('click', (e)=>{
-        router.push('Login');
+        router.push({path: '/login', replace: true});
       })
     }
   }
