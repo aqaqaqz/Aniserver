@@ -6,11 +6,15 @@ import com.aniserver.api.model.Result;
 import com.aniserver.api.service.DirectoryService;
 import com.aniserver.common.Const;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @CrossOrigin(origins = "*")
 @RequestMapping("api")
@@ -26,6 +30,12 @@ public class DirectoryController {
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
+    @GetMapping(value = "/directory/recent")
+    public ResponseEntity<?> searchDirectoryListRecent() throws InvalidPageException {
+        List<Directory> data = directoryService.searchDirectoryListRecent();
+        return ResponseEntity.status(HttpStatus.OK).body(data);
+    }
+
     @GetMapping(value = "/directory/search")
     public ResponseEntity<?> searchDirectoryListKeyword(@RequestParam(defaultValue="") String keyword) {
         Directory data = directoryService.searchDirectoryListUseKeyword(keyword);
@@ -34,8 +44,39 @@ public class DirectoryController {
 
     @GetMapping(value = "/directory/divide")
     public ResponseEntity<?> divideDirectoryList(@RequestParam(defaultValue="") List<String> pathList) {
+        pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Healer Girl - 06 (BS11 1280x720 x264 AAC).mp4");
+
         int successCnt = directoryService.divideDirectoryList(pathList);
         return ResponseEntity.status(HttpStatus.OK).body(new Result(pathList.size(), successCnt));
     }
+
+    /**
+     * 정해진 용량대로 스트리밍
+     */
+    @GetMapping(value = "/directory/streaming")
+    public ResponseEntity<ResourceRegion> vidoeRegionFileName(@RequestParam String path, @RequestHeader HttpHeaders headers) throws IOException {
+        String fileFullPath = Const.DEFAULT_PATH + path;
+        Resource resource = new FileSystemResource(fileFullPath);
+        final long chunkSize = 1024 * 1024 * 3;
+        long contentLength = resource.contentLength();
+        ResourceRegion region;
+        try {
+            HttpRange httpRange = headers.getRange().stream().findFirst().get();
+            long start = httpRange.getRangeStart(contentLength);
+            long end = httpRange.getRangeEnd(contentLength);
+            long rangeLength = Long.min(chunkSize, end - start + 1);
+            region = new ResourceRegion(resource, start, rangeLength);
+        } catch (Exception e) {
+            long rangeLength = Long.min(chunkSize, contentLength);
+            region = new ResourceRegion(resource, 0, rangeLength);
+        }
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES))
+                .contentType(MediaTypeFactory.getMediaType(resource).orElse(MediaType.APPLICATION_OCTET_STREAM))
+                .header("Accept-Ranges", "bytes")
+                .eTag(path) // IE 부분 호출을 위해서 설정
+                .body(region);
+        }
+
 
 }

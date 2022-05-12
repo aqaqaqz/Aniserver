@@ -8,6 +8,7 @@ public class Const {
     public static final String FALSE = "N";
 
     public static final List<String> ABLE_MOVIE_EXTENSION = Arrays.asList("mp4", "mkv");
+    public static final String ABLE_MOVIE_EXTENSION_MP4 = "mp4";
     public static final List<String> ABLE_SUBTITLE_EXTENSION = Arrays.asList("smi", "ass", "srt");
     public static final List<String> USE_RAWS = Arrays.asList("[Ohys-Raws]", "[Leopard-Raws]");
 
@@ -19,6 +20,7 @@ public class Const {
     public static final String EMPTY = "EMPTY";
 
     public static final String DEFAULT_PATH = "/Users/lsh/Documents/aniserver test/";
+    public static final String THUMBNAIL_PATH = "./thumbnail/";
 
     public final static String LOGIN_SESSION_NAME = "member";
 

@@ -32,6 +32,9 @@
         </form>
 
         <div class="text-end">
+          <button type="button" class="btn btn-outline-light me-2" id="searchBtn">Search</button>
+        </div>
+        <div class="text-end">
           <button type="button" class="btn btn-outline-light me-2" id="loginPageBtn">Login</button>
         </div>
       </div>

@@ -15,6 +15,7 @@ import java.util.*;
 public class DirectoryService extends BaseService {
 
     private Map<String, Directory> directoryMap = new HashMap<>();
+    private List<Directory> recentDivideList = new ArrayList<>();
 
     /**
      * 경로를 통해 하위 디렉터리를 탐색한다.
@@ -181,6 +182,9 @@ public class DirectoryService extends BaseService {
         return cnt;
     }
 
+    /**
+     *  애니메이션 분류하기
+     */
     private void divideAnimation(File f){
         String quarter = getQuarterUseTitle(f.getName());
         String title = Utils.string.getAnimatinoTitle(f.getName());
@@ -200,9 +204,21 @@ public class DirectoryService extends BaseService {
         if(!Utils.file.isExist(titlePath))
             Utils.file.makeDirectory(titlePath);
 
-        //자막 파일이 존재하면 이동
-        String extension = Utils.file.getExtension(f.getPath());
         Utils.file.moveDirectory(f.getPath(), titlePath+"/"+f.getName());
+
+        //동영상 파일이면 썸네일을 만든다.
+        String extension = Utils.file.getExtension(f.getPath());
+        if(Const.ABLE_MOVIE_EXTENSION_MP4.equals(extension)) {
+            File recentAnimaionFile = new File(titlePath + "/" + f.getName());
+            Utils.file.makeThumbnail(recentAnimaionFile);
+
+            Directory recentAnimation = new Directory();
+            recentAnimation.setPath(recentAnimaionFile.getPath().replace(Const.DEFAULT_PATH, ""));
+            recentAnimation.setName(recentAnimaionFile.getName());
+            recentDivideList.add(recentAnimation);
+        }
+
+        //자막 파일이 존재하면 이동
         for(String subExtension : Const.ABLE_SUBTITLE_EXTENSION){
             String subFullPath = f.getPath().replace("."+extension, "."+subExtension);
             if(Utils.file.isExist(subFullPath)){
@@ -212,6 +228,9 @@ public class DirectoryService extends BaseService {
         }
     }
 
+    /**
+     *  타이틀로 yyyy-q폴더 조회
+     */
     private String getQuarterUseTitle(String title){
         for(Directory q : searchDirectoryListUseKeyword("").getLower()){
             for(Directory t : q.getLower()){
@@ -220,5 +239,12 @@ public class DirectoryService extends BaseService {
         }
 
         return Const.EMPTY;
+    }
+
+    /**
+     * 최근 분류된 애니메이션의 리스트를 리턴
+     */
+    public List<Directory> searchDirectoryListRecent() {
+        return recentDivideList;
     }
 }

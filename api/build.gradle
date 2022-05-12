@@ -39,4 +39,7 @@ dependencies {
 
     implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.jcodec:jcodec:0.1.9'
+    implementation 'org.jcodec:jcodec-javase:0.1.9'
 }
