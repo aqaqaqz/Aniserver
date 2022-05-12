@@ -1,7 +1,7 @@
 <template>
   <div class="album py-5 bg-light">
     <div class="container">
-      <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 g-1" style="margin:50px;">
+      <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 g-1">
         <div class="col">
           <div class="card shadow-sm">
             <video class="bd-placeholder-img card-img-top" focusable="false" controls="" autoplay="" name="media">
