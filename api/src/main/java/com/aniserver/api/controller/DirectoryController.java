@@ -13,6 +13,9 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +48,9 @@ public class DirectoryController {
     @GetMapping(value = "/directory/divide")
     public ResponseEntity<?> divideDirectoryList(@RequestParam(defaultValue="") List<String> pathList) {
         pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Healer Girl - 06 (BS11 1280x720 x264 AAC).mp4");
+        pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Kawaii Dake ja Nai Shikimori-san - 05 (AT-X 1280x720 x264 AAC).mp4");
+        pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Komi-san wa, Komyushou Desu. Part 2 - 06 (TX 1280x720 x264 AAC).mp4");
+        pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Tomodachi Game - 06 (BS4 1280x720 x264 AAC).mp4");
 
         int successCnt = directoryService.divideDirectoryList(pathList);
         return ResponseEntity.status(HttpStatus.OK).body(new Result(pathList.size(), successCnt));
@@ -76,7 +82,32 @@ public class DirectoryController {
                 .header("Accept-Ranges", "bytes")
                 .eTag(path) // IE 부분 호출을 위해서 설정
                 .body(region);
+    }
+
+    /**
+     * 정해진 용량대로 스트리밍
+     */
+    @GetMapping(value = "/directory/thumbnail")
+    public ResponseEntity<Resource> displayThumbnail(@RequestParam String name){
+        final String thumbnailPath = Const.THUMBNAIL_PATH+name.replace(".mp4", ".png");
+        Resource resource = new FileSystemResource(thumbnailPath);
+        if(!resource.exists())
+            return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+
+        HttpHeaders headers = new HttpHeaders();
+        Path filePath = null;
+
+        try{
+            filePath = Paths.get(thumbnailPath);
+            headers.add("context-type", Files.probeContentType(filePath));
+        }catch(IOException e){
+            e.printStackTrace();
         }
+
+        return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+
+
+    }
 
 
 }

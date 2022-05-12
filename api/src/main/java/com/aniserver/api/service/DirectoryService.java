@@ -212,10 +212,12 @@ public class DirectoryService extends BaseService {
             File recentAnimaionFile = new File(titlePath + "/" + f.getName());
             Utils.file.makeThumbnail(recentAnimaionFile);
 
-            Directory recentAnimation = new Directory();
-            recentAnimation.setPath(recentAnimaionFile.getPath().replace(Const.DEFAULT_PATH, ""));
-            recentAnimation.setName(recentAnimaionFile.getName());
-            recentDivideList.add(recentAnimation);
+            if(recentDivideList.stream().noneMatch(d -> recentAnimaionFile.getName().equals(d.getName()))){
+                Directory recentAnimation = new Directory();
+                recentAnimation.setPath(recentAnimaionFile.getPath().replace(Const.DEFAULT_PATH, ""));
+                recentAnimation.setName(recentAnimaionFile.getName());
+                recentDivideList.add(recentAnimation);
+            }
         }
 
         //자막 파일이 존재하면 이동
