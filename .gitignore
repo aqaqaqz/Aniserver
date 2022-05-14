@@ -30,3 +30,5 @@ rebel.xml
 .gradle
 /build/
 .gradletasknamecache
+api/thumbnail
+
