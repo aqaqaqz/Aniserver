@@ -47,6 +47,11 @@ public class DirectoryController {
 
     @GetMapping(value = "/directory/divide")
     public ResponseEntity<?> divideDirectoryList(@RequestParam(defaultValue="") List<String> pathList) {
+        pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Healer Girl - 06 (BS11 1280x720 x264 AAC).mp4");
+        pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Kawaii Dake ja Nai Shikimori-san - 05 (AT-X 1280x720 x264 AAC).mp4");
+        pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Komi-san wa, Komyushou Desu. Part 2 - 06 (TX 1280x720 x264 AAC).mp4");
+        pathList.add("/Users/lsh/Documents/aniserver test/[Ohys-Raws] Tomodachi Game - 06 (BS4 1280x720 x264 AAC).mp4");
+
         int successCnt = directoryService.divideDirectoryList(pathList);
         return ResponseEntity.status(HttpStatus.OK).body(new Result(pathList.size(), successCnt));
     }
@@ -100,9 +105,5 @@ public class DirectoryController {
         }
 
         return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
-
-
     }
-
-
 }

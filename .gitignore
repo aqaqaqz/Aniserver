@@ -31,4 +31,4 @@ rebel.xml
 /build/
 .gradletasknamecache
 api/thumbnail
-
+api/recent_list

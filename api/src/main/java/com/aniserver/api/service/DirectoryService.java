@@ -8,14 +8,15 @@ import com.aniserver.common.util.Msg;
 import com.aniserver.common.util.Utils;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.io.*;
+import java.sql.Array;
 import java.util.*;
+
 
 @Service
 public class DirectoryService extends BaseService {
 
     private Map<String, Directory> directoryMap = new HashMap<>();
-    private List<Directory> recentDivideList = new ArrayList<>();
 
     /**
      * 경로를 통해 하위 디렉터리를 탐색한다.
@@ -212,12 +213,11 @@ public class DirectoryService extends BaseService {
             File recentAnimaionFile = new File(titlePath + "/" + f.getName());
             Utils.file.makeThumbnail(recentAnimaionFile);
 
-            if(recentDivideList.stream().noneMatch(d -> recentAnimaionFile.getName().equals(d.getName()))){
-                Directory recentAnimation = new Directory();
-                recentAnimation.setPath(recentAnimaionFile.getPath().replace(Const.DEFAULT_PATH, ""));
-                recentAnimation.setName(recentAnimaionFile.getName());
-                recentDivideList.add(recentAnimation);
-            }
+
+            System.out.println(recentAnimaionFile.getPath());
+            addRecentList(
+                    recentAnimaionFile.getName(),
+                    recentAnimaionFile.getPath().replace(Const.DEFAULT_PATH, ""));
         }
 
         //자막 파일이 존재하면 이동
@@ -247,6 +247,87 @@ public class DirectoryService extends BaseService {
      * 최근 분류된 애니메이션의 리스트를 리턴
      */
     public List<Directory> searchDirectoryListRecent() {
-        return recentDivideList;
+
+        List<Directory> recentList = new ArrayList<>();
+        for(String info : getRecentList()){
+            if(Utils.string.isEmpty(info)) continue;
+
+            String[] tempInfo = info.split(Const.RECENT_INFO_SEPARATOR);
+            Directory d = new Directory();
+            d.setName(tempInfo[0]);
+            d.setPath(tempInfo[1]);
+            recentList.add(d);
+        }
+
+        Collections.reverse(recentList);
+
+        return recentList;
+    }
+
+    //최근 분류파일 생성
+    private void createRecentFile(){
+        if(Utils.file.isExist(Const.RECENT_PATH))
+            return;
+
+        try {
+            OutputStream output = new FileOutputStream(Const.RECENT_PATH);
+            String str ="";
+            byte[] by=str.getBytes();
+            output.write(by);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //최근 분류 리스트
+    private List<String> getRecentList(){
+        createRecentFile(); //없으면 생성
+
+        List<String> recentList = null;
+        try {
+            FileInputStream fileStream = new FileInputStream( Const.RECENT_PATH );
+
+            byte[ ] readBuffer = new byte[fileStream.available()];
+            fileStream.read(readBuffer);
+            fileStream.close();
+
+            recentList = Arrays.asList((new String(readBuffer)).split(Const.RECENT_LIST_SEPARATOR));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(recentList == null) recentList = new ArrayList<>();
+
+        return recentList;
+    }
+
+    //최근 분류 리스트 추가
+    private void addRecentList(String name, String path){
+        List<String> recentList = new ArrayList<>();
+        recentList.addAll(getRecentList());
+
+        for(int i=0;i<recentList.size();i++){
+            if(recentList.get(i).split(Const.RECENT_INFO_SEPARATOR)[0].equals(name)){
+                recentList.remove(i);
+                break;
+            }
+        }
+
+        recentList.add(name + Const.RECENT_INFO_SEPARATOR + path);
+        while(recentList.size() > 9)
+            recentList.remove(0);
+
+        try {
+            OutputStream output = new FileOutputStream(Const.RECENT_PATH);
+            String str = "";
+            for(String info : recentList){
+                if(!str.isEmpty()) str += Const.RECENT_LIST_SEPARATOR;
+                str += info;
+            }
+            byte[] by = str.getBytes();
+            output.write(by);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

@@ -21,6 +21,9 @@ public class Const {
 
     public static final String DEFAULT_PATH = "/Users/lsh/Documents/aniserver test/";
     public static final String THUMBNAIL_PATH = "./thumbnail/";
+    public static final String RECENT_PATH = "./recent_list";
+    public static final String RECENT_LIST_SEPARATOR = "1q2w3e4r";
+    public static final String RECENT_INFO_SEPARATOR = "QWERASDF";
 
     public final static String LOGIN_SESSION_NAME = "member";
 
